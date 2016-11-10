@@ -16,9 +16,11 @@ Start the HTTP server with `make server`
 
 If make is not available on your machine, you can use `npm start`.
 
+Visit in your browser: [http://localhost:3000](http://localhost:3000)
+
 ## Why the proxy?
 
-The NASA API appears to disallow XHR CORS requests (i.e. from your browser). The proxy simply forwards and requests to `/proxy` to the NASA API.
+The NASA API appears to disallow XHR CORS requests (i.e. from your browser). The `/proxy` route simply forwards requests to the NASA API.
 
 ## Technology Used
 
