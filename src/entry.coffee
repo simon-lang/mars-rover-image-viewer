@@ -4,5 +4,27 @@ angular = require 'angular'
 
 app = angular.module 'lens-ui-code-test', []
 
-app.run ->
-  console.log 'OK'
+app.service 'Photos', [
+  '$http'
+  ($http) ->
+    return {
+      getPhotos: () ->
+        return $http.get '/proxy?earth_date=2015-6-3&api_key=DEMO_KEY'
+    }
+]
+
+app.run [
+  '$rootScope'
+  'Photos'
+  ($rootScope, Photos) ->
+    console.log 'OK'
+
+    $rootScope.filter =
+      rovers: []
+      cameras: []
+
+    $rootScope.search = ->
+      Photos.getPhotos().then ({data}) ->
+        console.log data.photos
+        $rootScope.photos = data.photos
+]
