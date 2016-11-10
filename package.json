@@ -4,7 +4,7 @@
   "description": "",
   "main": "./build/bundle.js",
   "scripts": {
-    "build": "webpack",
+    "build": "pug src/views --out build/; webpack",
     "start": "webpack-dev-server --host 0.0.0.0",
     "test": "mocha"
   },
