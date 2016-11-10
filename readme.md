@@ -18,6 +18,14 @@ If make is not available on your machine, you can use `npm start`.
 
 Visit in your browser: [http://localhost:3000](http://localhost:3000)
 
+## Running the Tests
+
+Run tests with `make test` or `npm test`.
+
+## Linting
+
+Use `make lint` to lint the Coffeescript source.
+
 ## Why the proxy?
 
 The NASA API appears to disallow XHR CORS requests (i.e. from your browser). The `/proxy` route simply forwards requests to the NASA API.
@@ -32,6 +40,9 @@ The NASA API appears to disallow XHR CORS requests (i.e. from your browser). The
 - Bootstrap as a CSS Framework
 - Angular JS for a JS Framework
 - Express for the HTTP Server and node-fetch for accessing the NASA API
+- Mocha, Chai, Sinon for testing, assertions and spies
+- Coffeelint for linting
+- Make for providing a simple API for installing, testing, running
 
 ## TODO
 

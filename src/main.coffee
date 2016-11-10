@@ -1,5 +1,5 @@
-rovers = require './rovers.coffee'
-cameras = require './cameras.coffee'
+rovers = require './enums/rovers.coffee'
+cameras = require './enums/cameras.coffee'
 
 module.exports = [
   '$rootScope'
