@@ -5,7 +5,8 @@
   "main": "./build/bundle.js",
   "scripts": {
     "build": "pug src/views --out build/; webpack",
-    "start": "webpack-dev-server --host 0.0.0.0",
+    "start": "coffee ./src/server.coffee",
+    "dev": "webpack-dev-server --host 0.0.0.0",
     "test": "mocha"
   },
   "postinstall": "echo 'foo';",
