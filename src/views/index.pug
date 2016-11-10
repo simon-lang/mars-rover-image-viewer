@@ -41,7 +41,7 @@ html(lang="en" ng-app="lens-ui-code-test")
 
             .loading(ng-if="loading") Loading...
 
-            .photo(ng-repeat="photo in photos")
+            .photo(ng-repeat="photo in photos | limitTo:20")
               .link(
                 ng-click="save(photo)"
                 ng-class="{ 'padded': !photo.saved, 'alert alert-success': photo.saved } "
