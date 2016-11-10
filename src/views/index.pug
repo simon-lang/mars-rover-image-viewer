@@ -37,7 +37,7 @@ html(lang="en" ng-app="lens-ui-code-test")
             li.link(ng-class="{ active: pane === 'collected'}")
               a(ng-click="pane = 'collected'") Collected Images
 
-          .results(ng-if="pane === 'results'")
+          .results(ng-if="pane === 'results' && (photos.length || loading)")
 
             .loading(ng-if="loading") Loading...
 
@@ -46,7 +46,8 @@ html(lang="en" ng-app="lens-ui-code-test")
                 ng-click="save(photo)"
                 ng-class="{ 'padded': !photo.saved, 'alert alert-success': photo.saved } "
               )
-                img.img-responsive(ng-src="{{photo.img_src}}")
+                .text-center
+                  img.img-responsive(ng-src="{{photo.img_src}}")
                 div(ng-if="photo.saved")
                   i.fa.fa-check
                   |  Saved
@@ -61,17 +62,17 @@ html(lang="en" ng-app="lens-ui-code-test")
 
             div(ng-repeat="photo in saved")
 
-              div
-                img.img-responsive(ng-src="{{photo.img_src}}")
+              .well
+                .text-center
+                  img.img-responsive(ng-src="{{photo.img_src}}")
                 .alert.alert-success(ng-if="photo.saved")
                   i.fa.fa-check
                   |  Saved
 
-              h3 {{ photo.rover.name }}
-              div {{ photo.earth_date }}
-              div {{ photo.camera.name }} ({{ photo.camera.full_name }})
+                a.btn.btn-danger.pull-right(
+                  ng-click="save(photo)"
+                ) Remove From Collection
 
-              a.btn.btn-danger(
-                ng-click="save(photo)"
-              ) Remove From Collection
-
+                h3 {{ photo.rover.name }}
+                div {{ photo.earth_date }}
+                div {{ photo.camera.name }} ({{ photo.camera.full_name }})
