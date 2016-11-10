@@ -15,7 +15,7 @@ html(lang="en" ng-app="lens-ui-code-test")
             form(ng-submit="search()")
               select.form-control(
                 ng-model="filter.rover"
-                ng-options="o as o for o in filter.rovers"
+                ng-options="rover for rover in enums.rovers"
               )
               input.form-control(
                 ng-model="filter.date"
@@ -23,7 +23,7 @@ html(lang="en" ng-app="lens-ui-code-test")
               )
               select.form-control(
                 ng-model="filter.camera"
-                ng-options="o as o for o in filter.cameras"
+                ng-options="camera.code as camera.label for camera in enums.cameras"
               )
               button.btn(type="submit") Search
 

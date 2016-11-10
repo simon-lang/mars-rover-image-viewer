@@ -8,8 +8,12 @@ app.service 'Photos', [
   '$http'
   ($http) ->
     return {
-      getPhotos: () ->
-        return $http.get '/proxy?earth_date=2015-6-3&api_key=DEMO_KEY'
+      getPhotos: (filter) ->
+        return $http(
+          method: 'POST'
+          url: '/proxy'
+          data: filter
+        )
     }
 ]
 
@@ -18,13 +22,18 @@ app.run [
   'Photos'
   ($rootScope, Photos) ->
 
-    $rootScope.filter =
-      rovers: []
-      cameras: []
+    $rootScope.filter = filter =
+      date: '2015-6-3'
+      rover: 'Curiosity'
+      cameras: 'FHAZ'
+
+    $rootScope.enums =
+      rovers: require './rovers.coffee'
+      cameras: require './cameras.coffee'
 
     $rootScope.search = ->
       $rootScope.loading = true
-      Photos.getPhotos().then ({data}) ->
+      Photos.getPhotos(filter).then ({data}) ->
         console.log data.photos
         $rootScope.photos = data.photos
         $rootScope.loading = false
