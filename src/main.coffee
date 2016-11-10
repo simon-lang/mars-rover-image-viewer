@@ -3,9 +3,12 @@ cameras = require './cameras.coffee'
 
 module.exports = [
   '$rootScope'
+  '$templateCache'
   'localStorageService'
   'photoService'
-  ($rootScope, localStorageService, photoService) ->
+  ($rootScope, $templateCache, localStorageService, photoService) ->
+
+    $templateCache.put 'templates/filters', require './templates/filters.pug'
 
     $rootScope.pane = 'results'
 

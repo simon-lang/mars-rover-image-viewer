@@ -12,7 +12,7 @@ module.exports = {
       },
       {
         test: /\.pug$/,
-        loader: 'pug'
+        loader: 'pug-html-loader'
       },
       {
         test: /\.less$/,

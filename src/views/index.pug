@@ -14,21 +14,7 @@ html(lang="en" ng-app="lens-ui-code-test")
             |  Mars Rover Image Viewer
       .row
         .col-md-4
-          .filters
-            form(ng-submit="search()")
-              select.form-control(
-                ng-model="filter.rover"
-                ng-options="rover for rover in enums.rovers"
-              )
-              input.form-control(
-                ng-model="filter.date"
-                uib-datepicker
-              )
-              select.form-control(
-                ng-model="filter.camera"
-                ng-options="camera.code as camera.label for camera in enums.cameras"
-              )
-              button.btn(type="submit") Search
+          .filters(ng-include="templates/filters")
 
         .col-md-8
           ul.nav.nav-tabs
@@ -51,10 +37,6 @@ html(lang="en" ng-app="lens-ui-code-test")
                 div(ng-if="photo.saved")
                   i.fa.fa-check
                   |  Saved
-
-              //- .clearfix
-                a.btn.btn-link(ng-click="photo.showRaw = !photo.showRaw")
-                  | {{ photo.showRaw ? 'Hide' : 'Show' }} Raw Data
 
               pre.well(ng-if="photo.showRaw") {{ photo | json }}
 

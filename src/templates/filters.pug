@@ -1,0 +1,14 @@
+form(ng-submit="search()")
+  select.form-control(
+    ng-model="filter.rover"
+    ng-options="rover for rover in enums.rovers"
+  )
+  input.form-control(
+    ng-model="filter.date"
+    uib-datepicker
+  )
+  select.form-control(
+    ng-model="filter.camera"
+    ng-options="camera.code as camera.label for camera in enums.cameras"
+  )
+  button.btn(type="submit") Search
