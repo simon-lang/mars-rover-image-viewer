@@ -5,29 +5,35 @@ html(lang="en" ng-app="lens-ui-code-test")
     link(link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous")
     script(src="bundle.js")
   body
-    h1 Mars Rover Image Viewer
+    .container
+      .row
+        .col-md-12
+          h1 Mars Rover Image Viewer
+      .row
+        .col-md-4
+          .filters
+            form(ng-submit="search()")
+              select.form-control(
+                ng-model="filter.rover"
+                ng-options="o as o for o in filter.rovers"
+              )
+              input.form-control(
+                ng-model="filter.date"
+                uib-datepicker
+              )
+              select.form-control(
+                ng-model="filter.camera"
+                ng-options="o as o for o in filter.cameras"
+              )
+              button.btn(type="submit") Search
 
-    .filters
-      form(ng-submit="search()")
+        .col-md-8
+          .results
 
-        //- select(
-        //-   ng-model="filter.rover"
-        //-   ng-options="filter.rovers"
-        //- )
-        input.form-control(
-          ng-model="filter.date"
-          uib-datepicker
-        )
-        //- select(
-        //-   ng-model="filter.camera"
-        //-   ng-options="filter.cameras"
-        //- )
+            div(ng-if="loading") Loading...
 
-        button.btn(type="submit") Search
+            div(ng-repeat="item in photos")
+              img.img-responsive(ng-src="{{item.img_src}}")
+              pre.well {{ item | json }}
 
-    .results
-
-      div(ng-repeat="item in photos")
-        pre.well {{ item | json }}
-
-    .collected-images
+          .collected-images

@@ -17,14 +17,15 @@ app.run [
   '$rootScope'
   'Photos'
   ($rootScope, Photos) ->
-    console.log 'OK'
 
     $rootScope.filter =
       rovers: []
       cameras: []
 
     $rootScope.search = ->
+      $rootScope.loading = true
       Photos.getPhotos().then ({data}) ->
         console.log data.photos
         $rootScope.photos = data.photos
+        $rootScope.loading = false
 ]
