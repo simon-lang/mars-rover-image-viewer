@@ -1,6 +1,10 @@
 require './less/main.less'
 
+_ = require 'lodash'
 angular = require 'angular'
+
+rovers = require './rovers.coffee'
+cameras = require './cameras.coffee'
 
 app = angular.module 'lens-ui-code-test', []
 
@@ -24,14 +28,26 @@ app.run [
 
     $rootScope.filter = filter =
       date: '2015-6-3'
-      rover: 'Curiosity'
-      cameras: 'FHAZ'
+      rover: rovers[0]
+      camera: cameras[0]
 
     $rootScope.enums =
-      rovers: require './rovers.coffee'
-      cameras: require './cameras.coffee'
+      rovers: rovers
+      cameras: cameras
+
+    $rootScope.saved = []
+
+    $rootScope.save = (photo) ->
+      photo.saved = !photo.saved
+      existing = _.find $rootScope.saved, id: photo.id
+      if existing?
+        $rootScope.saved = _.reject $rootScope.saved, id: photo.id
+      else
+        $rootScope.saved.push photo
 
     $rootScope.search = ->
+      $rootScope.pane = 'results'
+      $rootScope.photos = []
       $rootScope.loading = true
       Photos.getPhotos(filter).then ({data}) ->
         console.log data.photos

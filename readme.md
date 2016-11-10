@@ -35,7 +35,7 @@ The NASA API appears to disallow XHR CORS requests (i.e. from your browser). The
 
 ## TODO
 
-- Filters
 - Directives + Templates
-- "Save" functionality
-- Load NASA API key via env var
+- Basic persistence
+- Use ui-router
+- Only show camera+rover combos that exist
