@@ -8,8 +8,6 @@ module.exports = [
   'photoService'
   ($rootScope, $templateCache, localStorageService, photoService) ->
 
-    $templateCache.put 'templates/filters', require './templates/filters.pug'
-
     $rootScope.pane = 'results'
 
     $rootScope.filter = filter =
