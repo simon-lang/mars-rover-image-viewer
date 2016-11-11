@@ -1,7 +1,7 @@
 form(ng-submit="search()")
   select.form-control(
     ng-model="filter.rover"
-    ng-options="rover for rover in enums.rovers"
+    ng-options="rover.label as rover.label for rover in enums.rovers"
   )
   input.form-control(
     ng-model="filter.date"

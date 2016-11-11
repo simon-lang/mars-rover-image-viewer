@@ -1,0 +1,38 @@
+{
+    "arrow_spacing": {
+        "level": "warn"
+    },
+    "max_line_length": {
+        "value": 120,
+        "level": "warn",
+        "limitComments": true
+    },
+    "missing_fat_arrows": {
+        "level": "warn"
+    },
+    "newlines_after_classes": {
+        "value": 3,
+        "level": "ignore"
+    },
+    "no_empty_functions": {
+        "level": "warn"
+    },
+    "no_empty_param_list": {
+        "level": "warn"
+    },
+    "no_interpolation_in_single_quotes": {
+        "level": "warn"
+    },
+    "no_trailing_whitespace": {
+      "level": "warn"
+    },
+    "no_unnecessary_double_quotes": {
+        "level": "warn"
+    },
+    "no_unnecessary_fat_arrows": {
+        "level": "warn"
+    },
+    "non_empty_constructor_needs_parens": {
+        "level": "warn"
+    }
+}

@@ -1,5 +1,5 @@
-rovers = require './rovers.coffee'
-cameras = require './cameras.coffee'
+rovers = require './enums/rovers.coffee'
+cameras = require './enums/cameras.coffee'
 
 module.exports = [
   '$rootScope'
@@ -43,5 +43,8 @@ module.exports = [
         $rootScope.photos.map (photo) ->
           photo.saved = isSaved photo
           return photo
+      .catch (error) ->
+        $rootScope.error = error
+      .finally ->
         $rootScope.loading = false
 ]
