@@ -7,10 +7,13 @@ form(ng-submit="search()")
     )
   .form-group
     label Earth Date
-    input.form-control(
-      ng-model="filter.date"
-      uib-datepicker
-    )
+    .input-group
+      input.form-control(
+        ng-model="filter.date"
+      )
+      span.input-group-btn
+        button(type="button" class="btn btn-default" ng-click="datepickerOpen = !datepickerOpen")
+          i.fa.fa-calendar
   .form-group
     label Camera
     select.form-control(
@@ -18,4 +21,4 @@ form(ng-submit="search()")
       ng-options="camera.code as camera.label for camera in enums.cameras"
     )
   .form-group
-    button.btn(type="submit") Search
+    button.btn.btn-primary(type="submit") Search

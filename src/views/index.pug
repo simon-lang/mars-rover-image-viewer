@@ -4,60 +4,24 @@ html(lang="en" ng-app="lens-ui-code-test")
     title Mars Rover Image Viewer
     link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous")
     link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.6.1/lodash.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.9/angular.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.2.0/ui-bootstrap-tpls.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.2.0/ui-bootstrap.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js")
     script(src="bundle.js")
   body
-    .container
+    .container(ng-controller="MainController")
       .row
         .col-md-12
-          h1
-            i.fa.fa-rocket
-            |  Mars Rover Image Viewer
+          header
+
       .row
         .col-md-4
           filters
 
         .col-md-8
-          ul.nav.nav-tabs
-            li.link(ng-class="{ active: pane === 'results'}")
-              a(ng-click="pane = 'results'") Results
-            li.link(ng-class="{ active: pane === 'collected'}")
-              a(ng-click="pane = 'collected'") Collected Images
-
-
-          .results(ng-if="pane === 'results' && (photos.length || loading || error)")
-
-            .alert.alert-danger(ng-if="error") {{ error }}
-
-            .loading(ng-if="loading") Loading...
-
-            .photo(ng-repeat="photo in photos | limitTo:20")
-              .link(
-                ng-click="save(photo)"
-                ng-class="{ 'padded': !photo.saved, 'alert alert-success': photo.saved } "
-              )
-                .text-center
-                  img.img-responsive(ng-src="{{photo.img_src}}")
-                div(ng-if="photo.saved")
-                  i.fa.fa-check
-                  |  Saved
-
-              pre.well(ng-if="photo.showRaw") {{ photo | json }}
-
-          .collected-images(ng-if="pane === 'collected'")
-
-            div(ng-repeat="photo in saved")
-
-              .well
-                .text-center
-                  img.img-responsive(ng-src="{{photo.img_src}}")
-                .alert.alert-success(ng-if="photo.saved")
-                  i.fa.fa-check
-                  |  Saved
-
-                a.btn.btn-danger.pull-right(
-                  ng-click="save(photo)"
-                ) Remove From Collection
-
-                h3 {{ photo.rover.name }}
-                div {{ photo.earth_date }}
-                div {{ photo.camera.name }} ({{ photo.camera.full_name }})
+          tabs
+          results
+          collected

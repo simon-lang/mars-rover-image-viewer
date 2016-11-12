@@ -2,54 +2,53 @@ rovers = require './enums/rovers.coffee'
 cameras = require './enums/cameras.coffee'
 
 module.exports = [
-  '$rootScope'
-  '$templateCache'
+  '$scope'
   'localStorageService'
   'photoService'
-  ($rootScope, $templateCache, localStorageService, photoService) ->
+  ($scope, localStorageService, photoService) ->
 
-    $rootScope.pane = 'results'
+    $scope.pane = 'results'
 
-    $rootScope.filter = filter = localStorageService.get('filter') or
+    $scope.filter = filter = localStorageService.get('filter') or
       date: '2015-6-3'
       rover: rovers[0].label
       camera: cameras[0].code
 
-    $rootScope.enums =
+    $scope.enums =
       rovers: rovers
       cameras: cameras
 
-    $rootScope.saved = localStorageService.get('saved') or []
+    $scope.saved = localStorageService.get('saved') or []
 
     isSaved = (photo) ->
-      existing = _.find $rootScope.saved, id: photo.id
+      existing = _.find $scope.saved, id: photo.id
       return existing?
 
-    $rootScope.save = (photo) ->
+    $scope.save = (photo) ->
       photo.saved = !photo.saved
       if isSaved photo
-        $rootScope.saved = _.reject $rootScope.saved, id: photo.id
+        $scope.saved = _.reject $scope.saved, id: photo.id
       else
-        $rootScope.saved.push photo
+        $scope.saved.push photo
 
-      localStorageService.set 'saved', $rootScope.saved
+      localStorageService.set 'saved', $scope.saved
 
-    $rootScope.search = ->
+    $scope.search = ->
       localStorageService.set('filter', filter)
-      $rootScope.error = null
-      $rootScope.pane = 'results'
-      $rootScope.photos = []
-      $rootScope.loading = true
+      $scope.error = null
+      $scope.pane = 'results'
+      $scope.photos = []
+      $scope.loading = true
       photoService.getPhotos(filter)
       .then ({data}) ->
         unless data.photos
           throw new Error 'No Results'
-        $rootScope.photos = data.photos
-        $rootScope.photos?.map (photo) ->
+        $scope.photos = data.photos
+        $scope.photos?.map (photo) ->
           photo.saved = isSaved photo
           return photo
       .catch (error) ->
-        $rootScope.error = error.message
+        $scope.error = error.message
       .finally ->
-        $rootScope.loading = false
+        $scope.loading = false
 ]

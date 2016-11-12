@@ -1,18 +1,13 @@
-.collected-images(ng-if="pane === 'collected'")
+.collected-images.padded(ng-if="pane === 'collected'")
 
   div(ng-repeat="photo in saved")
 
+    img.img-responsive(ng-src="{{photo.img_src}}")
     .well
-      .text-center
-        img.img-responsive(ng-src="{{photo.img_src}}")
-      .alert.alert-success(ng-if="photo.saved")
-        i.fa.fa-check
-        |  Saved
-
-      a.btn.btn-danger.pull-right(
-        ng-click="save(photo)"
-      ) Remove From Collection
-
-      h3 {{ photo.rover.name }}
+      h3
+        a.btn.btn-danger.pull-right(
+          ng-click="save(photo)"
+        ) Remove From Collection
+        | {{ photo.rover.name }}
       div {{ photo.earth_date }}
       div {{ photo.camera.name }} ({{ photo.camera.full_name }})

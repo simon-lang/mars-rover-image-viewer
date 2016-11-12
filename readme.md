@@ -57,7 +57,8 @@ The NASA API appears to disallow XHR CORS requests (i.e. from your browser). The
 - Server Side Persistence
 - Tidy the UI display and bring it more in line with the mockups
 - Limit search results to 20 at a time
-- Add unit tests
+- Smooth Image loading directives
+- More unit tests
 
 ## Disclaimer
 
