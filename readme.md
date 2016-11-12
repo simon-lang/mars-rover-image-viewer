@@ -50,8 +50,6 @@ The NASA API appears to disallow XHR CORS requests (i.e. from your browser). The
 
 - Directives + Templates
 - Send page param to NASA API. Add pagination controls
-- Use Mission Manifest API to determine acceptable dates
-- Datepicker
 - Better error handling for bad API calls
 - Add routing (so clicking browser back/forward will navigate between tabs)
 - Server Side Persistence
