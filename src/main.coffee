@@ -48,11 +48,11 @@ module.exports = [
 
     _updateManifest = (manifest) ->
       $scope.manifests[filter.rover] = manifest
-      $scope.dateOptions =
-        minDate: moment(manifest.landing_date).toDate()
-        maxDate: moment(manifest.max_date).toDate()
+      minDate = moment(manifest.landing_date).toDate()
+      maxDate = moment(manifest.max_date).toDate()
+      $scope.dateOptions = { minDate, maxDate }
 
-      unless $scope.filter.date
+      if $scope.filter.date is null or $scope.filter.date < minDate or $scope.filter.date > maxDate
         $scope.filter.date = moment(manifest.landing_date).toDate()
 
     $scope.updateManifest = ->
