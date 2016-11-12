@@ -589,7 +589,7 @@
 /* 17 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"collected-images padded\" ng-if=\"pane === 'collected'\"><div class=\"no-content\" ng-if=\"saved.length === 0\">No saved photos\n</div><div class=\"photo\" ng-repeat=\"photo in saved\"><img class=\"img-responsive\" ng-src=\"{{photo.img_src}}\"/><div class=\"well\"><h4><a class=\"btn btn-danger pull-right\" ng-click=\"save(photo)\">Remove From Collection</a>{{ photo.rover.name }}</h4><div>{{ photo.earth_date }}</div><div>{{ photo.camera.name }} ({{ photo.camera.full_name }})</div></div></div></div>";
+	module.exports = "<div class=\"collected-images padded\" ng-if=\"pane === 'collected'\"><div class=\"no-content\" ng-if=\"saved.length === 0\"><p>No saved photos</p><p><a class=\"link\" ng-click=\"import()\">Want to see some pre-selected ones?</a></p></div><div class=\"photo\" ng-repeat=\"photo in saved\"><img class=\"img-responsive\" ng-src=\"{{photo.img_src}}\"/><div class=\"well\"><h4><a class=\"btn btn-danger pull-right\" ng-click=\"save(photo)\">Remove From Collection</a>{{ photo.rover.name }}</h4><div>{{ photo.earth_date }}</div><div>{{ photo.camera.name }} ({{ photo.camera.full_name }})</div></div></div></div>";
 
 /***/ },
 /* 18 */
@@ -607,7 +607,7 @@
 /* 20 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"results padded\" ng-if=\"pane === 'results' &amp;&amp; (photos.length || loading || error)\"><div class=\"no-content\" ng-if=\"error\">{{ error }}</div><div class=\"loading\" ng-if=\"loading\">Loading...</div><div class=\"photo\" ng-repeat=\"photo in photos | limitTo:20\"><img class=\"img-responsive\" ng-src=\"{{photo.img_src}}\"/><div class=\"well\"><h4><a class=\"btn pull-right\" ng-click=\"save(photo)\" ng-class=\"{ 'btn-success': photo.saved, 'btn-default': '!photo.saved' }\"><i class=\"fa fa-check\" ng-if=\"photo.saved\"></i><i class=\"fa fa-save\" ng-if=\"!photo.saved\"></i> {{ photo.saved ? 'Saved' : 'Save' }}</a>{{ photo.rover.name }}</h4><div>{{ photo.earth_date }}</div><div>{{ photo.camera.name }} ({{ photo.camera.full_name }})</div></div><pre class=\"well\" ng-if=\"photo.showRaw\">{{ photo | json }}</pre></div></div>";
+	module.exports = "<div class=\"results padded\" ng-if=\"pane === 'results'\"><div class=\"no-content\" ng-if=\"photos.length === 0 &amp;&amp; !error &amp;&amp; !loading\">Search to see some results</div><div class=\"no-content\" ng-if=\"error\">{{ error }}</div><div class=\"loading\" ng-if=\"loading\">Loading...</div><div class=\"photo\" ng-repeat=\"photo in photos | limitTo:20\"><img class=\"img-responsive\" ng-src=\"{{photo.img_src}}\"/><div class=\"well\"><h4><a class=\"btn pull-right\" ng-click=\"save(photo)\" ng-class=\"{ 'btn-success': photo.saved, 'btn-default': '!photo.saved' }\"><i class=\"fa fa-check\" ng-if=\"photo.saved\"></i><i class=\"fa fa-save\" ng-if=\"!photo.saved\"></i> {{ photo.saved ? 'Saved' : 'Save' }}</a>{{ photo.rover.name }}</h4><div>{{ photo.earth_date }}</div><div>{{ photo.camera.name }} ({{ photo.camera.full_name }})</div></div><pre class=\"well\" ng-if=\"photo.showRaw\">{{ photo | json }}</pre></div></div>";
 
 /***/ },
 /* 21 */
@@ -619,11 +619,13 @@
 /* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var cameras, rovers;
+	var cameras, favourites, rovers;
 
 	rovers = __webpack_require__(23);
 
 	cameras = __webpack_require__(24);
+
+	favourites = __webpack_require__(25);
 
 	module.exports = [
 	  '$scope', 'localStorageService', 'photoService', function($scope, localStorageService, photoService) {
@@ -635,11 +637,14 @@
 	      rover: rovers[0].label,
 	      camera: cameras[0].code
 	    };
-	    $scope.filter.date = moment($scope.filter.date).toDate();
+	    if ($scope.filter.date) {
+	      $scope.filter.date = moment($scope.filter.date).toDate();
+	    }
 	    $scope.enums = {
 	      rovers: rovers,
 	      cameras: cameras
 	    };
+	    $scope.photos = [];
 	    $scope.saved = localStorageService.get('saved') || [];
 	    $scope.dateOptions = {};
 	    isSaved = function(photo) {
@@ -648,6 +653,9 @@
 	        id: photo.id
 	      });
 	      return existing != null;
+	    };
+	    $scope["import"] = function() {
+	      return $scope.saved = favourites;
 	    };
 	    $scope.save = function(photo) {
 	      photo.saved = !photo.saved;
@@ -662,10 +670,13 @@
 	    };
 	    _updateManifest = function(manifest) {
 	      $scope.manifests[filter.rover] = manifest;
-	      return $scope.dateOptions = {
+	      $scope.dateOptions = {
 	        minDate: moment(manifest.landing_date).toDate(),
 	        maxDate: moment(manifest.max_date).toDate()
 	      };
+	      if (!$scope.filter.date) {
+	        return $scope.filter.date = moment(manifest.landing_date).toDate();
+	      }
 	    };
 	    $scope.updateManifest = function() {
 	      if ($scope.manifests[filter.rover]) {
@@ -769,6 +780,420 @@
 	    code: 'MINITES',
 	    label: 'Miniature Thermal Emission Spectrometer (Mini-TES)',
 	    rovers: 3
+	  }
+	];
+
+
+/***/ },
+/* 25 */
+/***/ function(module, exports) {
+
+	module.exports = [
+	  {
+	    "id": 317593,
+	    "sol": 60,
+	    "camera": {
+	      "id": 29,
+	      "name": "NAVCAM",
+	      "rover_id": 7,
+	      "full_name": "Navigation Camera"
+	    },
+	    "img_src": "http://mars.nasa.gov/mer/gallery/all/2/n/060/2N131698647EFF1159P1940L0M1-BR.JPG",
+	    "earth_date": "2004-03-05",
+	    "rover": {
+	      "id": 7,
+	      "name": "Spirit",
+	      "landing_date": "2004-01-04",
+	      "launch_date": "2003-06-10",
+	      "status": "complete",
+	      "max_sol": 2208,
+	      "max_date": "2010-03-21",
+	      "total_photos": 124550,
+	      "cameras": [
+	        {
+	          "name": "FHAZ",
+	          "full_name": "Front Hazard Avoidance Camera"
+	        }, {
+	          "name": "NAVCAM",
+	          "full_name": "Navigation Camera"
+	        }, {
+	          "name": "PANCAM",
+	          "full_name": "Panoramic Camera"
+	        }, {
+	          "name": "MINITES",
+	          "full_name": "Miniature Thermal Emission Spectrometer (Mini-TES)"
+	        }, {
+	          "name": "ENTRY",
+	          "full_name": "Entry, Descent, and Landing Camera"
+	        }, {
+	          "name": "RHAZ",
+	          "full_name": "Rear Hazard Avoidance Camera"
+	        }
+	      ]
+	    },
+	    "saved": true,
+	    "$$hashKey": "object:302"
+	  }, {
+	    "id": 148844,
+	    "sol": 51,
+	    "camera": {
+	      "id": 16,
+	      "name": "NAVCAM",
+	      "rover_id": 6,
+	      "full_name": "Navigation Camera"
+	    },
+	    "img_src": "http://mars.nasa.gov/mer/gallery/all/1/n/051/1N132726286EFF06A8P1944L0M1-BR.JPG",
+	    "earth_date": "2004-03-17",
+	    "rover": {
+	      "id": 6,
+	      "name": "Opportunity",
+	      "landing_date": "2004-01-25",
+	      "launch_date": "2003-07-07",
+	      "status": "active",
+	      "max_sol": 4550,
+	      "max_date": "2016-11-12",
+	      "total_photos": 184747,
+	      "cameras": [
+	        {
+	          "name": "FHAZ",
+	          "full_name": "Front Hazard Avoidance Camera"
+	        }, {
+	          "name": "NAVCAM",
+	          "full_name": "Navigation Camera"
+	        }, {
+	          "name": "PANCAM",
+	          "full_name": "Panoramic Camera"
+	        }, {
+	          "name": "MINITES",
+	          "full_name": "Miniature Thermal Emission Spectrometer (Mini-TES)"
+	        }, {
+	          "name": "ENTRY",
+	          "full_name": "Entry, Descent, and Landing Camera"
+	        }, {
+	          "name": "RHAZ",
+	          "full_name": "Rear Hazard Avoidance Camera"
+	        }
+	      ]
+	    },
+	    "saved": true,
+	    "$$hashKey": "object:571"
+	  }, {
+	    "id": 118932,
+	    "sol": 24,
+	    "camera": {
+	      "id": 14,
+	      "name": "FHAZ",
+	      "rover_id": 6,
+	      "full_name": "Front Hazard Avoidance Camera"
+	    },
+	    "img_src": "http://mars.nasa.gov/mer/gallery/all/1/f/024/1F130314566EDN0400P1111L0M1-BR.JPG",
+	    "earth_date": "2004-02-18",
+	    "rover": {
+	      "id": 6,
+	      "name": "Opportunity",
+	      "landing_date": "2004-01-25",
+	      "launch_date": "2003-07-07",
+	      "status": "active",
+	      "max_sol": 4550,
+	      "max_date": "2016-11-12",
+	      "total_photos": 184747,
+	      "cameras": [
+	        {
+	          "name": "FHAZ",
+	          "full_name": "Front Hazard Avoidance Camera"
+	        }, {
+	          "name": "NAVCAM",
+	          "full_name": "Navigation Camera"
+	        }, {
+	          "name": "PANCAM",
+	          "full_name": "Panoramic Camera"
+	        }, {
+	          "name": "MINITES",
+	          "full_name": "Miniature Thermal Emission Spectrometer (Mini-TES)"
+	        }, {
+	          "name": "ENTRY",
+	          "full_name": "Entry, Descent, and Landing Camera"
+	        }, {
+	          "name": "RHAZ",
+	          "full_name": "Rear Hazard Avoidance Camera"
+	        }
+	      ]
+	    },
+	    "saved": true,
+	    "$$hashKey": "object:2105"
+	  }, {
+	    "id": 286840,
+	    "sol": 50,
+	    "camera": {
+	      "id": 27,
+	      "name": "FHAZ",
+	      "rover_id": 7,
+	      "full_name": "Front Hazard Avoidance Camera"
+	    },
+	    "img_src": "http://mars.nasa.gov/mer/gallery/all/2/f/050/2F130804974EDN09EHF0006L0M1-BR.JPG",
+	    "earth_date": "2004-02-24",
+	    "rover": {
+	      "id": 7,
+	      "name": "Spirit",
+	      "landing_date": "2004-01-04",
+	      "launch_date": "2003-06-10",
+	      "status": "complete",
+	      "max_sol": 2208,
+	      "max_date": "2010-03-21",
+	      "total_photos": 124550,
+	      "cameras": [
+	        {
+	          "name": "FHAZ",
+	          "full_name": "Front Hazard Avoidance Camera"
+	        }, {
+	          "name": "NAVCAM",
+	          "full_name": "Navigation Camera"
+	        }, {
+	          "name": "PANCAM",
+	          "full_name": "Panoramic Camera"
+	        }, {
+	          "name": "MINITES",
+	          "full_name": "Miniature Thermal Emission Spectrometer (Mini-TES)"
+	        }, {
+	          "name": "ENTRY",
+	          "full_name": "Entry, Descent, and Landing Camera"
+	        }, {
+	          "name": "RHAZ",
+	          "full_name": "Rear Hazard Avoidance Camera"
+	        }
+	      ]
+	    },
+	    "saved": true,
+	    "$$hashKey": "object:22"
+	  }, {
+	    "id": 261952,
+	    "sol": 52,
+	    "camera": {
+	      "id": 17,
+	      "name": "PANCAM",
+	      "rover_id": 6,
+	      "full_name": "Panoramic Camera"
+	    },
+	    "img_src": "http://mars.nasa.gov/mer/gallery/all/1/p/052/1P132809996EFF06AGP2593R2M1-BR.JPG",
+	    "earth_date": "2004-03-18",
+	    "rover": {
+	      "id": 6,
+	      "name": "Opportunity",
+	      "landing_date": "2004-01-25",
+	      "launch_date": "2003-07-07",
+	      "status": "active",
+	      "max_sol": 4550,
+	      "max_date": "2016-11-12",
+	      "total_photos": 184747,
+	      "cameras": [
+	        {
+	          "name": "FHAZ",
+	          "full_name": "Front Hazard Avoidance Camera"
+	        }, {
+	          "name": "NAVCAM",
+	          "full_name": "Navigation Camera"
+	        }, {
+	          "name": "PANCAM",
+	          "full_name": "Panoramic Camera"
+	        }, {
+	          "name": "MINITES",
+	          "full_name": "Miniature Thermal Emission Spectrometer (Mini-TES)"
+	        }, {
+	          "name": "ENTRY",
+	          "full_name": "Entry, Descent, and Landing Camera"
+	        }, {
+	          "name": "RHAZ",
+	          "full_name": "Rear Hazard Avoidance Camera"
+	        }
+	      ]
+	    },
+	    "saved": true,
+	    "$$hashKey": "object:337"
+	  }, {
+	    "id": 109756,
+	    "sol": 3430,
+	    "camera": {
+	      "id": 14,
+	      "name": "FHAZ",
+	      "rover_id": 6,
+	      "full_name": "Front Hazard Avoidance Camera"
+	    },
+	    "img_src": "http://mars.nasa.gov/mer/gallery/all/1/f/3430/1F432692307EFFC8A2P1214L0M1-BR.JPG",
+	    "earth_date": "2013-09-18",
+	    "rover": {
+	      "id": 6,
+	      "name": "Opportunity",
+	      "landing_date": "2004-01-25",
+	      "launch_date": "2003-07-07",
+	      "status": "active",
+	      "max_sol": 4550,
+	      "max_date": "2016-11-12",
+	      "total_photos": 184747,
+	      "cameras": [
+	        {
+	          "name": "FHAZ",
+	          "full_name": "Front Hazard Avoidance Camera"
+	        }, {
+	          "name": "NAVCAM",
+	          "full_name": "Navigation Camera"
+	        }, {
+	          "name": "PANCAM",
+	          "full_name": "Panoramic Camera"
+	        }, {
+	          "name": "MINITES",
+	          "full_name": "Miniature Thermal Emission Spectrometer (Mini-TES)"
+	        }, {
+	          "name": "ENTRY",
+	          "full_name": "Entry, Descent, and Landing Camera"
+	        }, {
+	          "name": "RHAZ",
+	          "full_name": "Rear Hazard Avoidance Camera"
+	        }
+	      ]
+	    },
+	    "saved": true,
+	    "$$hashKey": "object:1194"
+	  }, {
+	    "id": 62105,
+	    "sol": 385,
+	    "camera": {
+	      "id": 25,
+	      "name": "MARDI",
+	      "rover_id": 5,
+	      "full_name": "Mars Descent Imager"
+	    },
+	    "img_src": "http://mars.jpl.nasa.gov/msl-raw-images/msss/00385/mrdi/0385MD0000900000101575E01_DXXX.jpg",
+	    "earth_date": "2013-09-05",
+	    "rover": {
+	      "id": 5,
+	      "name": "Curiosity",
+	      "landing_date": "2012-08-06",
+	      "launch_date": "2011-11-26",
+	      "status": "active",
+	      "max_sol": 1516,
+	      "max_date": "2016-11-10",
+	      "total_photos": 287785,
+	      "cameras": [
+	        {
+	          "name": "FHAZ",
+	          "full_name": "Front Hazard Avoidance Camera"
+	        }, {
+	          "name": "NAVCAM",
+	          "full_name": "Navigation Camera"
+	        }, {
+	          "name": "MAST",
+	          "full_name": "Mast Camera"
+	        }, {
+	          "name": "CHEMCAM",
+	          "full_name": "Chemistry and Camera Complex"
+	        }, {
+	          "name": "MAHLI",
+	          "full_name": "Mars Hand Lens Imager"
+	        }, {
+	          "name": "MARDI",
+	          "full_name": "Mars Descent Imager"
+	        }, {
+	          "name": "RHAZ",
+	          "full_name": "Rear Hazard Avoidance Camera"
+	        }
+	      ]
+	    },
+	    "saved": true,
+	    "$$hashKey": "object:242"
+	  }, {
+	    "id": 70274,
+	    "sol": 797,
+	    "camera": {
+	      "id": 24,
+	      "name": "MAHLI",
+	      "rover_id": 5,
+	      "full_name": "Mars Hand Lens Imager"
+	    },
+	    "img_src": "http://mars.jpl.nasa.gov/msl-raw-images/msss/00797/mhli/0797MH0003250050300282E01_DXXX.jpg",
+	    "earth_date": "2014-11-02",
+	    "rover": {
+	      "id": 5,
+	      "name": "Curiosity",
+	      "landing_date": "2012-08-06",
+	      "launch_date": "2011-11-26",
+	      "status": "active",
+	      "max_sol": 1516,
+	      "max_date": "2016-11-10",
+	      "total_photos": 287785,
+	      "cameras": [
+	        {
+	          "name": "FHAZ",
+	          "full_name": "Front Hazard Avoidance Camera"
+	        }, {
+	          "name": "NAVCAM",
+	          "full_name": "Navigation Camera"
+	        }, {
+	          "name": "MAST",
+	          "full_name": "Mast Camera"
+	        }, {
+	          "name": "CHEMCAM",
+	          "full_name": "Chemistry and Camera Complex"
+	        }, {
+	          "name": "MAHLI",
+	          "full_name": "Mars Hand Lens Imager"
+	        }, {
+	          "name": "MARDI",
+	          "full_name": "Mars Descent Imager"
+	        }, {
+	          "name": "RHAZ",
+	          "full_name": "Rear Hazard Avoidance Camera"
+	        }
+	      ]
+	    },
+	    "saved": true,
+	    "$$hashKey": "object:729"
+	  }, {
+	    "id": 67629,
+	    "sol": 868,
+	    "camera": {
+	      "id": 24,
+	      "name": "MAHLI",
+	      "rover_id": 5,
+	      "full_name": "Mars Hand Lens Imager"
+	    },
+	    "img_src": "http://mars.jpl.nasa.gov/msl-raw-images/msss/00868/mhli/0868MH0003900000302241E01_DXXX.jpg",
+	    "earth_date": "2015-01-14",
+	    "rover": {
+	      "id": 5,
+	      "name": "Curiosity",
+	      "landing_date": "2012-08-06",
+	      "launch_date": "2011-11-26",
+	      "status": "active",
+	      "max_sol": 1516,
+	      "max_date": "2016-11-10",
+	      "total_photos": 287785,
+	      "cameras": [
+	        {
+	          "name": "FHAZ",
+	          "full_name": "Front Hazard Avoidance Camera"
+	        }, {
+	          "name": "NAVCAM",
+	          "full_name": "Navigation Camera"
+	        }, {
+	          "name": "MAST",
+	          "full_name": "Mast Camera"
+	        }, {
+	          "name": "CHEMCAM",
+	          "full_name": "Chemistry and Camera Complex"
+	        }, {
+	          "name": "MAHLI",
+	          "full_name": "Mars Hand Lens Imager"
+	        }, {
+	          "name": "MARDI",
+	          "full_name": "Mars Descent Imager"
+	        }, {
+	          "name": "RHAZ",
+	          "full_name": "Rear Hazard Avoidance Camera"
+	        }
+	      ]
+	    },
+	    "saved": true,
+	    "$$hashKey": "object:33"
 	  }
 	];
 
