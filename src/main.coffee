@@ -9,7 +9,7 @@ module.exports = [
   'photoService'
   ($scope, localStorageService, photoService) ->
 
-    $scope.pane = 'collected'
+    $scope.pane = 'results'
 
     $scope.manifests = {}
 
