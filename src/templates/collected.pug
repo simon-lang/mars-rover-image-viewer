@@ -1,10 +1,10 @@
 .collected-images.padded(ng-if="pane === 'collected'")
 
-  div(ng-repeat="photo in saved")
+  .photo(ng-repeat="photo in saved")
 
     img.img-responsive(ng-src="{{photo.img_src}}")
     .well
-      h3
+      h4
         a.btn.btn-danger.pull-right(
           ng-click="save(photo)"
         ) Remove From Collection

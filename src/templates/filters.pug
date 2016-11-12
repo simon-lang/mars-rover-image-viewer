@@ -4,12 +4,19 @@ form(ng-submit="search()")
     select.form-control(
       ng-model="filter.rover"
       ng-options="rover.label as rover.label for rover in enums.rovers"
+      ng-change="updateManifest()"
     )
   .form-group
     label Earth Date
+      small(ng-if="manifests[filter.rover]")
+        em  ({{ manifests[filter.rover].landing_date }} -
+        em  {{ manifests[filter.rover].max_date }})
     .input-group
       input.form-control(
         ng-model="filter.date"
+        uib-datepicker-popup="yyyy-MM-d"
+        is-open="datepickerOpen"
+        ng-click="datepickerOpen = true"
       )
       span.input-group-btn
         button(type="button" class="btn btn-default" ng-click="datepickerOpen = !datepickerOpen")

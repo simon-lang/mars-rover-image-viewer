@@ -9,8 +9,10 @@ module.exports = [
 
     $scope.pane = 'results'
 
+    $scope.manifests = {}
+
     $scope.filter = filter = localStorageService.get('filter') or
-      date: '2015-6-3'
+      date: '2015-06-03'
       rover: rovers[0].label
       camera: cameras[0].code
 
@@ -32,6 +34,15 @@ module.exports = [
         $scope.saved.push photo
 
       localStorageService.set 'saved', $scope.saved
+
+    $scope.updateManifest = ->
+      unless $scope.manifests[filter.rover]
+        photoService.getManifest filter.rover
+        .then (manifest) ->
+          console.log manifest
+          $scope.manifests[filter.rover] = manifest
+        .catch (err) ->
+          console.warn 'ERR', err
 
     $scope.search = ->
       localStorageService.set('filter', filter)
@@ -61,4 +72,6 @@ module.exports = [
     $scope.hasCamera = (rover, camera) ->
       rover = _.find rovers, label: rover
       return (camera.rovers | rover.flag) is camera.rovers # bitmask
+
+    $scope.updateManifest()
 ]

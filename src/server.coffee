@@ -16,6 +16,17 @@ app.use bodyParser.json()
 
 app.use express.static 'build'
 
+app.post '/manifest', (req, res) ->
+
+  query = qs.stringify
+    api_key: API_KEY
+
+  endpoint = 'https://api.nasa.gov/mars-photos/api/v1/manifests/' + req.body.rover.toLowerCase() + '?' + query
+
+  fetch(endpoint)
+  .then (data) -> data.json()
+  .then (json) -> res.send json
+
 app.post '/proxy', (req, res) ->
 
   # console.log 'body', req.body

@@ -5,14 +5,15 @@
   .loading(ng-if="loading") Loading...
 
   .photo(ng-repeat="photo in photos | limitTo:20")
-    .link(
-      ng-click="save(photo)"
-      ng-class="{ 'padded': !photo.saved, 'alert alert-success': photo.saved } "
-    )
-      .text-center
-        img.img-responsive(ng-src="{{photo.img_src}}")
-      div(ng-if="photo.saved")
-        i.fa.fa-check
-        |  Saved
+    img.img-responsive(ng-src="{{photo.img_src}}")
+    .well
+      h4
+        a.btn.pull-right(ng-click="save(photo)" ng-class="{ 'btn-success': photo.saved, 'btn-default': '!photo.saved' }")
+          i.fa.fa-check(ng-if="photo.saved")
+          i.fa.fa-save(ng-if="!photo.saved")
+          |  {{ photo.saved ? 'Saved' : 'Save' }}
+        | {{ photo.rover.name }}
+      div {{ photo.earth_date }}
+      div {{ photo.camera.name }} ({{ photo.camera.full_name }})
 
     pre.well(ng-if="photo.showRaw") {{ photo | json }}
