@@ -51,4 +51,8 @@ module.exports = [
         $scope.error = error.message
       .finally ->
         $scope.loading = false
+
+    $scope.hasCamera = (rover, camera) ->
+      rover = _.find rovers, label: rover
+      return (camera.rovers | rover.flag) is camera.rovers # bitmask
 ]

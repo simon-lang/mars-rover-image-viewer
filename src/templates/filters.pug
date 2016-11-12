@@ -18,7 +18,7 @@ form(ng-submit="search()")
     label Camera
     select.form-control(
       ng-model="filter.camera"
-      ng-options="camera.code as camera.label for camera in enums.cameras"
+      ng-options="camera.code as camera.label disable when !hasCamera(filter.rover, camera) for camera in enums.cameras"
     )
   .form-group
     button.btn.btn-primary(type="submit") Search
