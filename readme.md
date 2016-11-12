@@ -73,3 +73,5 @@ This also doesn't mean I think these are the *best* technologies to use. In the 
 
 Similarly, while this doesn't have a huge amount of polish, or perfectly functional, I've tried to strike a reasonable amount of polish and functionality in the time I allowed for this development.
 
+You'll notice code commenting has been kept to a minimum. I try to write code that is readable and self-explanatory to anyone familiar with the technology, and only comment when I am doing something that isn't immediately obvious - like with the `hasCamera` method in `main.coffee`.
+

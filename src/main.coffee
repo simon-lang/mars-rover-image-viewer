@@ -52,6 +52,12 @@ module.exports = [
       .finally ->
         $scope.loading = false
 
+    # This method is used by the camera filter dropdown in accordance with
+    #  the ng-options directive's `disable when <expression>` functionality
+    # The camera.rovers and rover.flag values are used to form a bitmask.
+    # Next rover to be added will require a flag value of 8, then 16, etc.
+    # Any camera that exists on the new rover, will need to increment its
+    #  rovers field by 8.
     $scope.hasCamera = (rover, camera) ->
       rover = _.find rovers, label: rover
       return (camera.rovers | rover.flag) is camera.rovers # bitmask
