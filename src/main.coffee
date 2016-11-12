@@ -10,10 +10,10 @@ module.exports = [
 
     $rootScope.pane = 'results'
 
-    $rootScope.filter = filter =
+    $rootScope.filter = filter = localStorageService.get('filter') or
       date: '2015-6-3'
-      rover: rovers[0]
-      camera: cameras[0]
+      rover: rovers[0].label
+      camera: cameras[0].code
 
     $rootScope.enums =
       rovers: rovers
@@ -35,16 +35,21 @@ module.exports = [
       localStorageService.set 'saved', $rootScope.saved
 
     $rootScope.search = ->
+      localStorageService.set('filter', filter)
+      $rootScope.error = null
       $rootScope.pane = 'results'
       $rootScope.photos = []
       $rootScope.loading = true
-      photoService.getPhotos(filter).then ({data}) ->
+      photoService.getPhotos(filter)
+      .then ({data}) ->
+        unless data.photos
+          throw new Error 'No Results'
         $rootScope.photos = data.photos
-        $rootScope.photos.map (photo) ->
+        $rootScope.photos?.map (photo) ->
           photo.saved = isSaved photo
           return photo
       .catch (error) ->
-        $rootScope.error = error
+        $rootScope.error = error.message
       .finally ->
         $rootScope.loading = false
 ]

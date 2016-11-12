@@ -23,7 +23,10 @@ html(lang="en" ng-app="lens-ui-code-test")
             li.link(ng-class="{ active: pane === 'collected'}")
               a(ng-click="pane = 'collected'") Collected Images
 
-          .results(ng-if="pane === 'results' && (photos.length || loading)")
+
+          .results(ng-if="pane === 'results' && (photos.length || loading || error)")
+
+            .alert.alert-danger(ng-if="error") {{ error }}
 
             .loading(ng-if="loading") Loading...
 

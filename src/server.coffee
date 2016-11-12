@@ -34,6 +34,8 @@ app.post '/proxy', (req, res) ->
     data.json()
   .then (json) ->
     res.send json
+  .catch (err) ->
+    res.status(500).send 'Error fetching images'
 
 app.listen PORT, ->
   console.log 'Server listening on ' + PORT
