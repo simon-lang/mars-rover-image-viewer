@@ -7,20 +7,24 @@ module.exports = [
   'photoService'
   ($scope, localStorageService, photoService) ->
 
-    $scope.pane = 'results'
+    $scope.pane = 'collected'
 
     $scope.manifests = {}
 
     $scope.filter = filter = localStorageService.get('filter') or
-      date: '2015-06-03'
+      date: null
       rover: rovers[0].label
       camera: cameras[0].code
+
+    $scope.filter.date = moment($scope.filter.date).toDate()
 
     $scope.enums =
       rovers: rovers
       cameras: cameras
 
     $scope.saved = localStorageService.get('saved') or []
+
+    $scope.dateOptions = {}
 
     isSaved = (photo) ->
       existing = _.find $scope.saved, id: photo.id
@@ -35,12 +39,18 @@ module.exports = [
 
       localStorageService.set 'saved', $scope.saved
 
+    _updateManifest = (manifest) ->
+      $scope.manifests[filter.rover] = manifest
+      $scope.dateOptions =
+        minDate: moment(manifest.landing_date).toDate()
+        maxDate: moment(manifest.max_date).toDate()
+
     $scope.updateManifest = ->
-      unless $scope.manifests[filter.rover]
+      if $scope.manifests[filter.rover]
+        _updateManifest $scope.manifests[filter.rover]
+      else
         photoService.getManifest filter.rover
-        .then (manifest) ->
-          console.log manifest
-          $scope.manifests[filter.rover] = manifest
+        .then _updateManifest
         .catch (err) ->
           console.warn 'ERR', err
 

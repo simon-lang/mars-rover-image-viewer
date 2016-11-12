@@ -1,5 +1,8 @@
 .collected-images.padded(ng-if="pane === 'collected'")
 
+  .no-content(ng-if="saved.length === 0").
+    No saved photos
+
   .photo(ng-repeat="photo in saved")
 
     img.img-responsive(ng-src="{{photo.img_src}}")

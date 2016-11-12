@@ -15,6 +15,7 @@ form(ng-submit="search()")
       input.form-control(
         ng-model="filter.date"
         uib-datepicker-popup="yyyy-MM-d"
+        datepicker-options="dateOptions"
         is-open="datepickerOpen"
         ng-click="datepickerOpen = true"
       )
@@ -27,5 +28,7 @@ form(ng-submit="search()")
       ng-model="filter.camera"
       ng-options="camera.code as camera.label disable when !hasCamera(filter.rover, camera) for camera in enums.cameras"
     )
-  .form-group
-    button.btn.btn-primary(type="submit") Search
+  .form-group.clearfix
+    button.btn.btn-primary.pull-right(type="submit")
+      | Search &nbsp;
+      i.fa.fa-search

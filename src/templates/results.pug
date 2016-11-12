@@ -1,6 +1,6 @@
 .results.padded(ng-if="pane === 'results' && (photos.length || loading || error)")
 
-  .alert.alert-danger(ng-if="error") {{ error }}
+  .no-content(ng-if="error") {{ error }}
 
   .loading(ng-if="loading") Loading...
 
