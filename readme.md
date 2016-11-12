@@ -42,7 +42,7 @@ The NASA API appears to disallow XHR CORS requests (i.e. from your browser). The
 - NPM for dependency management
 - Webpack for building/bundling
 - Bootstrap as a CSS Framework
-- Angular JS for a JS Framework
+- Angular JS for a JS Framework. lodash and moment for utility
 - Express for the HTTP Server and node-fetch for accessing the NASA API
 - Mocha, Chai, Sinon for testing, assertions and spies
 - Coffeelint for linting
@@ -50,6 +50,7 @@ The NASA API appears to disallow XHR CORS requests (i.e. from your browser). The
 
 ## TODO
 
+- Using sol dates from the manifest could grey out days on the calendar that do not have photos
 - Send page param to NASA API. Add pagination controls
 - Better error handling for bad API calls
 - Add routing (so clicking browser back/forward will navigate between tabs)
@@ -62,6 +63,7 @@ The NASA API appears to disallow XHR CORS requests (i.e. from your browser). The
 
 - Date filter is one day off date on photos received. have not looked into it
 - Possibly a development issue only, however on a few occasions I have managed to get duplicate items in the collected items which results in an angular ngDupes error being thrown. `localStorage.clear()` in console to resolve. Can not reliably reproduce now.
+- Not sure why font files keep getting copied to the root of this directory during development
 
 
 ## Disclaimer
