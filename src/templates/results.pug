@@ -1,0 +1,18 @@
+.results(ng-if="pane === 'results' && (photos.length || loading || error)")
+
+  .alert.alert-danger(ng-if="error") {{ error }}
+
+  .loading(ng-if="loading") Loading...
+
+  .photo(ng-repeat="photo in photos | limitTo:20")
+    .link(
+      ng-click="save(photo)"
+      ng-class="{ 'padded': !photo.saved, 'alert alert-success': photo.saved } "
+    )
+      .text-center
+        img.img-responsive(ng-src="{{photo.img_src}}")
+      div(ng-if="photo.saved")
+        i.fa.fa-check
+        |  Saved
+
+    pre.well(ng-if="photo.showRaw") {{ photo | json }}
