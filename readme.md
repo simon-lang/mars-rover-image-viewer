@@ -4,21 +4,23 @@
 
 Requires Node v6. [Installer available here](https://nodejs.org/en/).
 
-## Installation
-
-Install dependencies and build client by running `make`.
-
-If make is not available on your machine, you can use `npm install && npm run build`.
-
 ## Running the HTTP Server
 
 Start the HTTP server with `make server`
 
 If make is not available on your machine, you can use `npm start`.
 
-Visit in your browser: [http://localhost:3000](http://localhost:3000)
+Visit in your browser: [http://localhost:3001](http://localhost:3001)
 
 Your NASA API key is set server side through an environment variable called NASA_API_KEY. So, to set it for a single run, you can do `NASA_API_KEY=xyz make server`. [This page](https://12factor.net/config) explains why storing config in environment variables is a good thing.
+
+## Development
+
+Install dependencies and build client by running `make build`.
+
+If make is not available on your machine, or it appears  you can use `npm install && npm run build`.
+
+The client can be edited with live reload using the webpack-dev-server by running `make dev` and visiting [http://localhost:8080/webpack-dev-server/](http://localhost:8080/webpack-dev-server/) in your browser. Note since the server runs on a different port, to work with the API you would need to update the URL in the photoService and allow CORS on the server.
 
 ## Running the Tests
 
@@ -48,7 +50,6 @@ The NASA API appears to disallow XHR CORS requests (i.e. from your browser). The
 
 ## TODO
 
-- Directives + Templates
 - Send page param to NASA API. Add pagination controls
 - Better error handling for bad API calls
 - Add routing (so clicking browser back/forward will navigate between tabs)
@@ -59,7 +60,9 @@ The NASA API appears to disallow XHR CORS requests (i.e. from your browser). The
 
 ## Known Issues
 
+- Date filter is one day off date on photos received. have not looked into it
 - Possibly a development issue only, however on a few occasions I have managed to get duplicate items in the collected items which results in an angular ngDupes error being thrown. `localStorage.clear()` in console to resolve. Can not reliably reproduce now.
+
 
 ## Disclaimer
 

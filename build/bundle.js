@@ -490,7 +490,7 @@
 
 
 	// module
-	exports.push([module.id, ".margin {\n  margin: 1em;\n}\n.link {\n  cursor: pointer;\n}\n.padded {\n  padding: 1em;\n}\n.text-center {\n  text-align: center;\n}\n.space-before {\n  margin-top: 1em;\n}\n.loading,\n.no-content {\n  text-align: center;\n  padding: 4em 0;\n}\n.results,\n.collected-images {\n  border: 1px solid #464545;\n  border-top: none;\n}\n.photo img {\n  width: 100%;\n}\n.header {\n  background: #111;\n  margin-bottom: 1em;\n}\n", ""]);
+	exports.push([module.id, ".margin {\n  margin: 1em;\n}\n.link {\n  cursor: pointer;\n}\n.padded {\n  padding: 1em;\n}\n.text-center {\n  text-align: center;\n}\n.space-before {\n  margin-top: 1em;\n}\n.loading,\n.no-content {\n  text-align: center;\n  padding: 4em 0;\n}\n.results,\n.collected-images {\n  border: 1px solid #464545;\n  border-top: none;\n}\n.photo img {\n  width: 100%;\n}\n.header {\n  background: #111;\n  margin-bottom: 1em;\n  padding-bottom: 0.1em;\n}\n", ""]);
 
 	// exports
 
@@ -538,7 +538,7 @@
 	      getPhotos: function(filter) {
 	        return $http({
 	          method: 'POST',
-	          url: '/proxy',
+	          url: '/photos',
 	          data: filter
 	        });
 	      },

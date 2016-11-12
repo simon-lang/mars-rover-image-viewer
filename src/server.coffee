@@ -4,7 +4,7 @@ fetch = require 'node-fetch'
 qs = require 'qs'
 
 API_KEY = process.env.NASA_API_KEY or 'DEMO_KEY' # temp default for convinience
-API_URL = 'https://api.nasa.gov/mars-photos/api/v1/rovers/'
+API_URL = 'https://api.nasa.gov/mars-photos/api/v1/'
 PORT = 3001
 
 unless API_KEY
@@ -16,26 +16,27 @@ app.use bodyParser.json()
 
 app.use express.static 'build'
 
+
 app.post '/manifest', (req, res) ->
 
   query = qs.stringify
     api_key: API_KEY
 
-  endpoint = 'https://api.nasa.gov/mars-photos/api/v1/manifests/' + req.body.rover.toLowerCase() + '?' + query
+  endpoint = API_URL + 'manifests/' + req.body.rover.toLowerCase() + '?' + query
 
   fetch(endpoint)
   .then (data) -> data.json()
   .then (json) -> res.send json
 
-app.post '/proxy', (req, res) ->
 
-  # console.log 'body', req.body
+app.post '/photos', (req, res) ->
+
   query = qs.stringify
     api_key: API_KEY
     earth_date: req.body.date
     camera: req.body.camera
 
-  endpoint = API_URL + req.body.rover.toLowerCase() + '/photos?' + query
+  endpoint = API_URL + 'rovers/' + req.body.rover.toLowerCase() + '/photos?' + query
   console.log 'fetching', endpoint
 
   fetch(endpoint)

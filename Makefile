@@ -10,6 +10,9 @@ build: deps
 server: deps
 	npm start
 
+dev: deps
+	npm run dev
+
 deps: node_modules
 
 .PHONY: test deps lint
