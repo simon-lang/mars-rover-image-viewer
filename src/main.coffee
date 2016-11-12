@@ -1,6 +1,8 @@
 rovers = require './enums/rovers.coffee'
 cameras = require './enums/cameras.coffee'
 
+favourites = require './favourites.coffee'
+
 module.exports = [
   '$scope'
   'localStorageService'
@@ -16,12 +18,14 @@ module.exports = [
       rover: rovers[0].label
       camera: cameras[0].code
 
-    $scope.filter.date = moment($scope.filter.date).toDate()
+    if $scope.filter.date
+      $scope.filter.date = moment($scope.filter.date).toDate()
 
     $scope.enums =
       rovers: rovers
       cameras: cameras
 
+    $scope.photos = []
     $scope.saved = localStorageService.get('saved') or []
 
     $scope.dateOptions = {}
@@ -29,6 +33,9 @@ module.exports = [
     isSaved = (photo) ->
       existing = _.find $scope.saved, id: photo.id
       return existing?
+
+    $scope.import = ->
+      $scope.saved = favourites
 
     $scope.save = (photo) ->
       photo.saved = !photo.saved
@@ -44,6 +51,9 @@ module.exports = [
       $scope.dateOptions =
         minDate: moment(manifest.landing_date).toDate()
         maxDate: moment(manifest.max_date).toDate()
+
+      unless $scope.filter.date
+        $scope.filter.date = moment(manifest.landing_date).toDate()
 
     $scope.updateManifest = ->
       if $scope.manifests[filter.rover]

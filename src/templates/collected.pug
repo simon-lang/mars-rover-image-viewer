@@ -1,7 +1,9 @@
 .collected-images.padded(ng-if="pane === 'collected'")
 
-  .no-content(ng-if="saved.length === 0").
-    No saved photos
+  .no-content(ng-if="saved.length === 0")
+    p No saved photos
+    p
+      a.link(ng-click="import()") Want to see some pre-selected ones?
 
   .photo(ng-repeat="photo in saved")
 

@@ -1,4 +1,6 @@
-.results.padded(ng-if="pane === 'results' && (photos.length || loading || error)")
+.results.padded(ng-if="pane === 'results'")
+
+  .no-content(ng-if="photos.length === 0 && !error && !loading") Search to see some results
 
   .no-content(ng-if="error") {{ error }}
 
