@@ -1,3 +1,4 @@
+require './less/bootstrap.min.css'
 require './less/main.less'
 
 app = angular.module 'lens-ui-code-test', [
