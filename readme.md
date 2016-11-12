@@ -49,16 +49,19 @@ The NASA API appears to disallow XHR CORS requests (i.e. from your browser). The
 ## TODO
 
 - Directives + Templates
-- HTML5 Date Input
-- Dupes in repeater
-- Error handling for bad API calls
-- Only show camera+rover combos that exist
+- Send page param to NASA API. Add pagination controls
+- Use Mission Manifest API to determine acceptable dates
+- Datepicker
+- Better error handling for bad API calls
 - Add routing (so clicking browser back/forward will navigate between tabs)
 - Server Side Persistence
-- Tidy the UI display and bring it more in line with the mockups
-- Limit search results to 20 at a time
-- Smooth Image loading directives
-- More unit tests
+- Further bring the UI display more in line with the mockups
+- Smooth Image loading directive
+- Add unit tests that actually showcase proper ui testing
+
+## Known Issues
+
+- Possibly a development issue only, however on a few occasions I have managed to get duplicate items in the collected items which results in an angular ngDupes error being thrown. `localStorage.clear()` in console to resolve. Can not reliably reproduce now.
 
 ## Disclaimer
 
@@ -66,6 +69,7 @@ My motivation in approaching this demo is to showcase a range of typical technol
 
 For such a small app, this probably seems like an excess of technology. It could easily be achieved more elegantly with simple HTML+CSS+JS with no pre-processors, frameworks, unit tests, etc. However for real world projects, these things do make life easier. So I've aimed to showcase my typical approach to a single page app.
 
-This also doesn't mean I think these are the *best* technologies to use. In the future I'd probably use React+Redux over Angular, and ES6 over Coffeescript.
+This also doesn't mean I think these are the *best* technologies to use. In the future I'd probably use React+Redux over Angular, and ES6 over Coffeescript. Usually I use grunt, jade and html2js. In this app I have used webpack, pug and pug-html-loader.
 
-Usually I use grunt, jade and html2js. In this app I have used webpack, pug and pug-html-loader.
+Similarly, while this doesn't have a huge amount of polish, or perfectly functional, I've tried to strike a reasonable amount of polish and functionality in the time I allowed for this development.
+
