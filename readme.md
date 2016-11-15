@@ -63,7 +63,7 @@ The NASA API appears to disallow XHR CORS requests (i.e. from your browser). The
 
 - Date filter is one day off date on photos received. have not looked into it
 - Possibly a development issue only, however on a few occasions I have managed to get duplicate items in the collected items which results in an angular ngDupes error being thrown. `localStorage.clear()` in console to resolve. Can not reliably reproduce now.
-- Not sure why font files keep getting copied to the root of this directory during development
+- Not sure why font files keep getting copied to the root of this directory during development by webpack
 
 
 ## Disclaimer

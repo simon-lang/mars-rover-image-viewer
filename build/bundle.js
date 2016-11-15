@@ -58,7 +58,7 @@
 
 	__webpack_require__(12);
 
-	app = angular.module('lens-ui-code-test', ['ui.bootstrap']);
+	app = angular.module('mars-rover-image-viewer', ['ui.bootstrap']);
 
 	app.service('localStorageService', __webpack_require__(14));
 
@@ -490,7 +490,7 @@
 
 
 	// module
-	exports.push([module.id, ".margin {\n  margin: 1em;\n}\n.link {\n  cursor: pointer;\n}\n.padded {\n  padding: 1em;\n}\n.text-center {\n  text-align: center;\n}\n.space-before {\n  margin-top: 1em;\n}\n.loading,\n.no-content {\n  text-align: center;\n  padding: 4em 0;\n}\n.results,\n.collected-images {\n  border: 1px solid #464545;\n  border-top: none;\n}\n.photo img {\n  width: 100%;\n}\n.header {\n  background: #111;\n  margin-bottom: 1em;\n  padding-bottom: 0.1em;\n}\n", ""]);
+	exports.push([module.id, ".margin {\n  margin: 1em;\n}\n.link {\n  cursor: pointer;\n}\n.padded {\n  padding: 1em;\n}\n.text-center {\n  text-align: center;\n}\n.space-before {\n  margin-top: 1em;\n}\n.loading,\n.no-content {\n  text-align: center;\n  padding: 4em 0;\n}\n.results,\n.collected-images {\n  border: 1px solid #464545;\n  border-top: none;\n}\n.photo img {\n  width: 100%;\n}\n.header {\n  background: #111;\n  margin-bottom: 1em;\n  padding-bottom: 1em;\n}\n.header i {\n  float: right;\n}\n", ""]);
 
 	// exports
 
