@@ -10,11 +10,12 @@ module.exports = [
   ($scope, localStorageService, photoService) ->
 
     $scope.pane = 'results'
-
+    $scope.searchBy = 'Martian Sol'
     $scope.manifests = {}
 
     $scope.filter = filter = localStorageService.get('filter') or
       date: null
+      sol: null
       rover: rovers[0].label
       camera: cameras[0].code
 
@@ -65,12 +66,20 @@ module.exports = [
           console.warn 'ERR', err
 
     $scope.search = ->
-      localStorageService.set('filter', filter)
+      data = _.clone filter
+      if $scope.searchBy is 'Martian Sol'
+        data.sol = filter.sol
+        delete data.earth_date
+      else
+        data.earth_date = filter.date
+        delete data.sol
+
+      localStorageService.set('filter', data)
       $scope.error = null
       $scope.pane = 'results'
       $scope.photos = []
       $scope.loading = true
-      photoService.getPhotos(filter)
+      photoService.getPhotos(data)
       .then ({data}) ->
         unless data.photos
           throw new Error 'No Results'

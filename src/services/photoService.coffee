@@ -5,9 +5,15 @@ module.exports = [
   '$http'
   ($http) ->
     getPhotos: (filter) ->
+      url = API_URL + 'rovers/' + filter.rover.toLowerCase() + '/photos' + '?camera=' + filter.camera
+      if filter.sol
+        url += '&sol=' + filter.sol
+      else
+        url += '&earth_date=' + moment(filter.earth_date).format('YYYY-M-D')
+      url += '&api_key=' + (API_KEY or 'DEMO_KEY')
       return $http(
         method: 'GET'
-        url: API_URL + 'rovers/' + filter.rover.toLowerCase() + '/photos' + '?camera=' + filter.camera + '&earth_date=' + moment(filter.date).format('YYYY-M-D')  + '&api_key=' + (API_KEY or 'DEMO_KEY')
+        url: url
       )
     getManifest: (rover) ->
       return $http(
