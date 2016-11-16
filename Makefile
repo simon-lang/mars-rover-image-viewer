@@ -7,9 +7,6 @@ lint: deps
 build: deps
 	npm run build
 
-server: deps
-	npm start
-
 dev: deps
 	npm run dev
 

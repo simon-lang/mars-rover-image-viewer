@@ -2,17 +2,7 @@
 
 ## Requirements
 
-Requires Node v6. [Installer available here](https://nodejs.org/en/).
-
-## Running the HTTP Server
-
-Start the HTTP server with `make server`
-
-If make is not available on your machine, you can use `npm start`.
-
-Visit in your browser: [http://localhost:3001](http://localhost:3001)
-
-Your NASA API key is set server side through an environment variable called NASA_API_KEY. So, to set it for a single run, you can do `NASA_API_KEY=xyz make server`. [This page](https://12factor.net/config) explains why storing config in environment variables is a good thing.
+Requires Node v6 to develop. [Installer available here](https://nodejs.org/en/).
 
 ## Development
 
@@ -30,10 +20,6 @@ Run tests with `make test` or `npm test`.
 
 Use `make lint` to lint the Coffeescript source.
 
-## Why the proxy?
-
-The NASA API appears to disallow XHR CORS requests (i.e. from your browser). The `/proxy` route simply forwards requests to the NASA API.
-
 ## Technology Used
 
 - Coffeescript and Node for all scripting
@@ -43,7 +29,6 @@ The NASA API appears to disallow XHR CORS requests (i.e. from your browser). The
 - Webpack for building/bundling
 - Bootstrap as a CSS Framework
 - Angular JS for a JS Framework. lodash and moment for utility
-- Express for the HTTP Server and node-fetch for accessing the NASA API
 - Mocha, Chai, Sinon for testing, assertions and spies
 - Coffeelint for linting
 - Make for providing a simple API for installing, testing, running

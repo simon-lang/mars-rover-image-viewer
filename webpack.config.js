@@ -27,10 +27,6 @@ module.exports = {
         loader: 'ng-cache?prefix=[dir]/[dir]'
       },
       {
-        test: require.resolve('jquery'),
-        loader: 'expose?$!expose?jQuery'
-      },
-      {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: 'url-loader?limit=10000&minetype=application/font-woff'
       },
