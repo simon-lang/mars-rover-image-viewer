@@ -532,9 +532,11 @@
 /* 15 */
 /***/ function(module, exports) {
 
-	var API_URL;
+	var API_KEY, API_URL;
 
 	API_URL = 'https://api.nasa.gov/mars-photos/api/v1/';
+
+	API_KEY = 'wwYXJBLASfX4wNrbLfEetDdx6U3EbRSm1Lx93DGa';
 
 	module.exports = [
 	  '$http', function($http) {
@@ -542,13 +544,13 @@
 	      getPhotos: function(filter) {
 	        return $http({
 	          method: 'GET',
-	          url: API_URL + 'rovers/' + filter.rover.toLowerCase() + '/photos' + '?camera=' + filter.camera + '&earth_date=' + moment(filter.date).format('YYYY-M-D') + '&api_key=' + (window.API_KEY || 'DEMO_KEY')
+	          url: API_URL + 'rovers/' + filter.rover.toLowerCase() + '/photos' + '?camera=' + filter.camera + '&earth_date=' + moment(filter.date).format('YYYY-M-D') + '&api_key=' + (API_KEY || 'DEMO_KEY')
 	        });
 	      },
 	      getManifest: function(rover) {
 	        return $http({
 	          method: 'GET',
-	          url: API_URL + 'manifests/' + rover.toLowerCase() + '?api_key=' + (window.API_KEY || 'DEMO_KEY')
+	          url: API_URL + 'manifests/' + rover.toLowerCase() + '?api_key=' + (API_KEY || 'DEMO_KEY')
 	        }).then(function(arg) {
 	          var data;
 	          data = arg.data;
