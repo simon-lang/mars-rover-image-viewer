@@ -4,15 +4,15 @@
 
 ## Requirements
 
-Requires Node v6 to develop. [Installer available here](https://nodejs.org/en/).
+Requires Node to develop. [Installer available here](https://nodejs.org/en/).
 
 ## Development
 
 Install dependencies and build client by running `make build`.
 
-If make is not available on your machine, or it appears  you can use `npm install && npm run build`.
+If make is not available on your machine, you can use `npm install && npm run build`.
 
-The client can be edited with live reload using the webpack-dev-server by running `make dev` and visiting [http://localhost:8080/webpack-dev-server/](http://localhost:8080/webpack-dev-server/) in your browser. Note since the server runs on a different port, to work with the API you would need to update the URL in the photoService and allow CORS on the server.
+The client can be edited with live reload using the webpack-dev-server by running `make dev` or `npm run dev` and visiting [http://localhost:8080/webpack-dev-server/](http://localhost:8080/webpack-dev-server/) in your browser.
 
 ## Running the Tests
 
@@ -34,6 +34,7 @@ Use `make lint` to lint the Coffeescript source.
 - Mocha, Chai, Sinon for testing, assertions and spies
 - Coffeelint for linting
 - Make for providing a simple API for installing, testing, running
+- Express.js was used for the now-defunct http proxy
 
 ## TODO
 
@@ -42,14 +43,12 @@ Use `make lint` to lint the Coffeescript source.
 - Better error handling for bad API calls
 - Add routing (so clicking browser back/forward will navigate between tabs)
 - Server Side Persistence
-- Further bring the UI display more in line with the mockups
-- Smooth Image loading directive
+- Smooth Image loading angular directive
 - Add unit tests that actually showcase proper ui testing
 
 ## Known Issues
 
-- Date filter is one day off date on photos received. have not looked into it
-- Possibly a development issue only, however on a few occasions I have managed to get duplicate items in the collected items which results in an angular ngDupes error being thrown. `localStorage.clear()` in console to resolve. Can not reliably reproduce now.
+- Date filter is one day off date on photos received.
 - Not sure why font files keep getting copied to the root of this directory during development by webpack
 
 
