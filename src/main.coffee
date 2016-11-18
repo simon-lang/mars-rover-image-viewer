@@ -37,6 +37,12 @@ module.exports = [
     $scope.import = ->
       $scope.saved = favourites
 
+    $scope.findSimilar = (photo) ->
+      filter.rover = photo.rover.name
+      filter.camera = photo.camera.name
+      filter.date = moment(photo.earth_date).toDate()
+      $scope.search()
+
     $scope.save = (photo) ->
       photo.saved = !photo.saved
       if isSaved photo

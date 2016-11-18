@@ -16,3 +16,5 @@
         | {{ photo.rover.name }}
       div {{ photo.earth_date }}
       div {{ photo.camera.name }} ({{ photo.camera.full_name }})
+      div
+        a.link(ng-click="findSimilar(photo)") See Similar
