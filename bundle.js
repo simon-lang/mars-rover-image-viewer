@@ -591,7 +591,7 @@
 /* 17 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"collected-images padded\" ng-if=\"pane === 'collected'\"><div class=\"no-content\" ng-if=\"saved.length === 0\"><p>No saved photos</p><p><a class=\"link\" ng-click=\"import()\">Want to see some pre-selected ones?</a></p></div><div class=\"photo\" ng-repeat=\"photo in saved\"><img class=\"img-responsive\" ng-src=\"{{photo.img_src}}\"/><div class=\"well\"><h4><a class=\"btn btn-danger pull-right\" ng-click=\"save(photo)\">Remove From Collection</a>{{ photo.rover.name }}</h4><div>{{ photo.earth_date }}</div><div>{{ photo.camera.name }} ({{ photo.camera.full_name }})</div></div></div></div>";
+	module.exports = "<div class=\"collected-images padded\" ng-if=\"pane === 'collected'\"><div class=\"no-content\" ng-if=\"saved.length === 0\"><p>No saved photos</p><p><a class=\"link\" ng-click=\"import()\">Want to see some pre-selected ones?</a></p></div><div class=\"photo\" ng-repeat=\"photo in saved\"><img class=\"img-responsive\" ng-src=\"{{photo.img_src}}\"/><div class=\"well\"><h4><a class=\"btn btn-danger pull-right\" ng-click=\"save(photo)\">Remove From Collection</a>{{ photo.rover.name }}</h4><div>{{ photo.earth_date }}</div><div>{{ photo.camera.name }} ({{ photo.camera.full_name }})</div><div><a class=\"link\" ng-click=\"findSimilar(photo)\">See Similar</a></div></div></div></div>";
 
 /***/ },
 /* 18 */
@@ -658,6 +658,12 @@
 	    };
 	    $scope["import"] = function() {
 	      return $scope.saved = favourites;
+	    };
+	    $scope.findSimilar = function(photo) {
+	      filter.rover = photo.rover.name;
+	      filter.camera = photo.camera.name;
+	      filter.date = moment(photo.earth_date).toDate();
+	      return $scope.search();
 	    };
 	    $scope.save = function(photo) {
 	      photo.saved = !photo.saved;
@@ -795,6 +801,53 @@
 
 	module.exports = [
 	  {
+	    "id": 67629,
+	    "sol": 868,
+	    "camera": {
+	      "id": 24,
+	      "name": "MAHLI",
+	      "rover_id": 5,
+	      "full_name": "Mars Hand Lens Imager"
+	    },
+	    "img_src": "http://mars.jpl.nasa.gov/msl-raw-images/msss/00868/mhli/0868MH0003900000302241E01_DXXX.jpg",
+	    "earth_date": "2015-01-14",
+	    "rover": {
+	      "id": 5,
+	      "name": "Curiosity",
+	      "landing_date": "2012-08-06",
+	      "launch_date": "2011-11-26",
+	      "status": "active",
+	      "max_sol": 1516,
+	      "max_date": "2016-11-10",
+	      "total_photos": 287785,
+	      "cameras": [
+	        {
+	          "name": "FHAZ",
+	          "full_name": "Front Hazard Avoidance Camera"
+	        }, {
+	          "name": "NAVCAM",
+	          "full_name": "Navigation Camera"
+	        }, {
+	          "name": "MAST",
+	          "full_name": "Mast Camera"
+	        }, {
+	          "name": "CHEMCAM",
+	          "full_name": "Chemistry and Camera Complex"
+	        }, {
+	          "name": "MAHLI",
+	          "full_name": "Mars Hand Lens Imager"
+	        }, {
+	          "name": "MARDI",
+	          "full_name": "Mars Descent Imager"
+	        }, {
+	          "name": "RHAZ",
+	          "full_name": "Rear Hazard Avoidance Camera"
+	        }
+	      ]
+	    },
+	    "saved": true,
+	    "$$hashKey": "object:33"
+	  }, {
 	    "id": 317593,
 	    "sol": 60,
 	    "camera": {
@@ -1152,53 +1205,6 @@
 	    },
 	    "saved": true,
 	    "$$hashKey": "object:729"
-	  }, {
-	    "id": 67629,
-	    "sol": 868,
-	    "camera": {
-	      "id": 24,
-	      "name": "MAHLI",
-	      "rover_id": 5,
-	      "full_name": "Mars Hand Lens Imager"
-	    },
-	    "img_src": "http://mars.jpl.nasa.gov/msl-raw-images/msss/00868/mhli/0868MH0003900000302241E01_DXXX.jpg",
-	    "earth_date": "2015-01-14",
-	    "rover": {
-	      "id": 5,
-	      "name": "Curiosity",
-	      "landing_date": "2012-08-06",
-	      "launch_date": "2011-11-26",
-	      "status": "active",
-	      "max_sol": 1516,
-	      "max_date": "2016-11-10",
-	      "total_photos": 287785,
-	      "cameras": [
-	        {
-	          "name": "FHAZ",
-	          "full_name": "Front Hazard Avoidance Camera"
-	        }, {
-	          "name": "NAVCAM",
-	          "full_name": "Navigation Camera"
-	        }, {
-	          "name": "MAST",
-	          "full_name": "Mast Camera"
-	        }, {
-	          "name": "CHEMCAM",
-	          "full_name": "Chemistry and Camera Complex"
-	        }, {
-	          "name": "MAHLI",
-	          "full_name": "Mars Hand Lens Imager"
-	        }, {
-	          "name": "MARDI",
-	          "full_name": "Mars Descent Imager"
-	        }, {
-	          "name": "RHAZ",
-	          "full_name": "Rear Hazard Avoidance Camera"
-	        }
-	      ]
-	    },
-	    "saved": true,
-	    "$$hashKey": "object:33"
 	  }
 	];
 
