@@ -78,7 +78,9 @@
 	  });
 	});
 
-	app.controller('MainController', __webpack_require__(25));
+	app.directive('loadImage', __webpack_require__(25));
+
+	app.controller('MainController', __webpack_require__(26));
 
 
 /***/ },
@@ -5256,7 +5258,7 @@
 /* 20 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"collected-images padded\"><div class=\"no-content\" ng-if=\"saved.length === 0\"><p>No saved photos</p><p><a class=\"link\" ng-click=\"import()\">Want to see some pre-selected ones?</a></p></div><div class=\"photo\" ng-repeat=\"photo in saved\"><img class=\"img-responsive\" ng-src=\"{{photo.img_src}}\"/><div class=\"well\"><h4><a class=\"btn btn-danger pull-right\" ng-click=\"save(photo)\">Remove From Collection</a>{{ photo.rover.name }}</h4><div>{{ photo.earth_date }}</div><div>{{ photo.camera.name }} ({{ photo.camera.full_name }})</div><div><a class=\"link\" ng-click=\"findSimilar(photo)\">See Similar</a></div></div></div><div class=\"share-code no-content\" ng-if=\"collectionCode()\">Share with this code:<h2 class=\"brand-font\"><a ng-click=\"logCode(collectionCode())\">{{ collectionCode() }}</a></h2></div></div>";
+	module.exports = "<div class=\"collected-images padded\"><div class=\"no-content\" ng-if=\"saved.length === 0\"><p>No saved photos</p><p><a class=\"link\" ng-click=\"import()\">Want to see some pre-selected ones?</a></p></div><div class=\"photo\" ng-repeat=\"photo in saved\"><img class=\"img-responsive\" ng-src=\"{{photo.img_src}}\"/><div class=\"well\"><h4><a class=\"btn btn-danger pull-right\" ng-click=\"save(photo)\">Remove From Collection</a>{{ photo.rover.name }}</h4><div>{{ photo.earth_date }}</div><div>{{ photo.camera.name }} ({{ photo.camera.full_name }})</div><div><a class=\"link\" ng-click=\"findSimilar(photo)\">See Similar</a></div></div></div><div class=\"share-code no-content\" ng-show=\"saved.length &gt; 0\">Share with this code:<h2 class=\"brand-font\"><a ng-click=\"logCode(collectionCode())\">{{ collectionCode() }}</a></h2></div></div>";
 
 /***/ },
 /* 21 */
@@ -5284,16 +5286,36 @@
 
 /***/ },
 /* 25 */
+/***/ function(module, exports) {
+
+	module.exports = function() {
+	  return {
+	    restrict: 'A',
+	    link: function(scope, element, attrs) {
+	      var newImage, src;
+	      newImage = jQuery(new Image());
+	      src = attrs.loadImage;
+	      newImage.on('load', function() {
+	        return element.attr('src', src);
+	      });
+	      return newImage.attr('src', src);
+	    }
+	  };
+	};
+
+
+/***/ },
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var cameras, decodeIds, encodeIds, favourites, rovers,
 	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-	rovers = __webpack_require__(26);
+	rovers = __webpack_require__(27);
 
-	cameras = __webpack_require__(27);
+	cameras = __webpack_require__(28);
 
-	favourites = __webpack_require__(28);
+	favourites = __webpack_require__(29);
 
 	encodeIds = function(photos) {
 	  var ids;
@@ -5342,6 +5364,7 @@
 	      return $scope.saved = favourites;
 	    };
 	    $scope.findSimilar = function(photo) {
+	      $scope.searchBy = 'Earth Date';
 	      filter.rover = photo.rover.name;
 	      filter.camera = photo.camera.name;
 	      filter.date = moment(photo.earth_date).toDate();
@@ -5507,7 +5530,7 @@
 
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -5525,7 +5548,7 @@
 
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -5570,7 +5593,7 @@
 
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports) {
 
 	module.exports = [
