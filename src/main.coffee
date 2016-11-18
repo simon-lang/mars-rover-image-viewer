@@ -3,6 +3,13 @@ cameras = require './enums/cameras.coffee'
 
 favourites = require './favourites.coffee'
 
+encodeIds = (photos) ->
+  ids = photos.map ({id}) -> id
+  btoa ids.join ','
+
+decodeIds = (str) ->
+  atob str.split ','
+
 module.exports = [
   '$scope'
   '$state'
@@ -12,7 +19,7 @@ module.exports = [
 
     $scope.$state = $state
     $scope.searchBy = 'Earth Date'
-    $scope.manifests = {}
+    $scope.manifests = manifests = {}
 
     $scope.filter = filter = localStorageService.get('filter') or
       date: null
@@ -28,7 +35,7 @@ module.exports = [
       cameras: cameras
 
     $scope.photos = []
-    $scope.saved = localStorageService.get('saved') or []
+    $scope.saved = saved = localStorageService.get('saved') or []
 
     $scope.dateOptions = {}
 
@@ -66,6 +73,8 @@ module.exports = [
       if $scope.filter.date is null or $scope.filter.date < minDate or $scope.filter.date > maxDate
         $scope.filter.date = moment(manifest.landing_date).toDate()
 
+      drawChart()
+
     $scope.updateManifest = ->
       if $scope.manifests[filter.rover]
         _updateManifest $scope.manifests[filter.rover]
@@ -76,6 +85,8 @@ module.exports = [
           console.warn 'ERR', err
 
     $scope.search = ->
+      if $scope.loading
+        return
       data = _.clone filter
       if $scope.searchBy is 'Martian Sol'
         data.sol = filter.sol
@@ -109,10 +120,71 @@ module.exports = [
     # Any camera that exists on the new rover, will need to increment its
     #  rovers field by 8.
     $scope.hasCamera = (rover, camera) ->
-      if $scope.searchBy is 'Martian Sol' and $scope.manifests[filter.rover]
+      if $scope.searchBy is 'Martian Sol' and $scope.manifests[filter.rover]?.photos[filter.sol]?
         return camera.code in $scope.manifests[filter.rover].photos[filter.sol].cameras
       rover = _.find rovers, label: rover
       return (camera.rovers | rover.flag) is camera.rovers # bitmask
 
+    $scope.currentManifest = ->
+      return manifests[filter.rover]
+
+    $scope.logCode = (s) ->
+      console.log decodeIds s
+
+    $scope.collectionCode = ->
+      if !saved.length
+        return null
+      return encodeIds saved
+
+    $scope.selectSol = (points, evt) ->
+      # console.log points[0]
+      sol = parseInt points[0].label.split('Sol ')[1] # todo: got to be a nicer way
+      entry = _.find $scope.currentManifest().photos, {sol}
+      unless filter.camera in entry.cameras
+        console.log 'HAD TO UPDATE CAMERA BECAUSE', filter.camera, 'not in ', entry.cameras
+        filter.camera = entry.cameras[0]
+      filter.sol = sol
+      $scope.searchBy = 'Martian Sol'
+      $scope.search()
+
+    $scope.limit = 20
+    $scope.offset = 0
+
+    $scope.decreaseOffset = ->
+      $scope.offset -= $scope.limit
+      drawChart()
+
+    $scope.increaseOffset = ->
+      $scope.offset += $scope.limit
+      drawChart()
+
+    drawChart = ->
+      labels = _.map manifests[filter.rover].photos, (photo) -> 'Sol ' + photo.sol
+      $scope.labels = labels.slice $scope.offset, $scope.offset + $scope.limit
+      $scope.series = ['Photos']
+      data = _.map manifests[filter.rover].photos, (photo) -> photo.total_photos
+      $scope.data = [
+        data.slice $scope.offset, $scope.offset + $scope.limit
+      ]
+
+      $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
+      $scope.options =
+        scales:
+          yAxes: [
+            {
+              id: 'y-axis-1',
+              type: 'linear',
+              display: true,
+              position: 'left'
+            },
+            {
+              id: 'y-axis-2',
+              type: 'linear',
+              display: true,
+              position: 'right'
+            }
+          ]
+
     $scope.updateManifest()
+
 ]

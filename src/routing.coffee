@@ -17,4 +17,9 @@ module.exports = [
       name: 'collected',
       url: '/collected',
       template: '<collected></collected>'
+
+    $stateProvider.state
+      name: 'manifest',
+      url: '/manifest',
+      template: require './templates/manifest.pug'
 ]

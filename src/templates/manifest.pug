@@ -1,0 +1,35 @@
+.manifest.padded
+
+  h3.brand-font.section-heading Mission Manifest for {{ filter.rover }}
+    small(ng-if="manifests[filter.rover]")
+      em  ({{ manifests[filter.rover].landing_date }} -
+      em  {{ manifests[filter.rover].max_date }})
+
+  canvas(
+    id="bar"
+    class="chart chart-bar"
+    chart-data="data"
+    chart-labels="labels"
+    chart-series="series"
+    chart-options="options"
+    chart-dataset-override="datasetOverride"
+    chart-click="selectSol"
+  )
+
+  .clearfix
+    a.link.pull-left.btn.btn-link(ng-click="decreaseOffset()")
+      i.fa.fa-caret-left
+      |  Previous {{limit}} days
+
+    a.link.pull-right.btn.btn-link(ng-click="increaseOffset()")
+      |  Next {{limit}} days &nbsp;
+      i.fa.fa-caret-right
+
+  //- pre {{selectedManifestEntry | json}}
+
+  //- div(ng-repeat="photo in manifests[filter.rover].photos")
+    span Sol {{ photo.sol }}
+      small  - {{ photo.total_photos }} Photos
+    span  (
+      a.link(ng-repeat="camera in photo.cameras" ng-click="filter.camera = camera") {{ camera }},&nbsp;
+    | )
