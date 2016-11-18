@@ -26,4 +26,6 @@ _.each directives, (directive) ->
   app.directive directive, ->
     template: require './templates/' + directive + '.pug'
 
+app.directive 'loadImage', require './directives/loadImageDirective.coffee'
+
 app.controller 'MainController', require './main.coffee'
