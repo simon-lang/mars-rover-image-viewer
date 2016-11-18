@@ -1,9 +1,14 @@
+require 'angular-ui-router'
+
 require './less/bootstrap.min.css'
 require './less/main.less'
 
 app = angular.module 'mars-rover-image-viewer', [
   'ui.bootstrap'
+  'ui.router'
 ]
+
+app.config require './routing.coffee'
 
 app.service 'localStorageService', require './services/localStorageService.coffee'
 app.service 'photoService', require './services/photoService.coffee'

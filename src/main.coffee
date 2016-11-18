@@ -5,12 +5,13 @@ favourites = require './favourites.coffee'
 
 module.exports = [
   '$scope'
+  '$state'
   'localStorageService'
   'photoService'
-  ($scope, localStorageService, photoService) ->
+  ($scope, $state, localStorageService, photoService) ->
 
-    $scope.pane = 'results'
-    $scope.searchBy = 'Martian Sol'
+    $scope.$state = $state
+    $scope.searchBy = 'Earth Date'
     $scope.manifests = {}
 
     $scope.filter = filter = localStorageService.get('filter') or
@@ -85,7 +86,7 @@ module.exports = [
 
       localStorageService.set('filter', data)
       $scope.error = null
-      $scope.pane = 'results'
+      $state.go 'results'
       $scope.photos = []
       $scope.loading = true
       photoService.getPhotos(data)

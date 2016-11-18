@@ -1,5 +1,5 @@
 ul.nav.nav-tabs
-  li.link(ng-class="{ active: pane === 'results'}")
-    a(ng-click="pane = 'results'") Results
-  li.link(ng-class="{ active: pane === 'collected'}")
-    a(ng-click="pane = 'collected'") Collected Images
+  li.link(ng-class="{ active: $state.includes('results') }")
+    a(ui-sref="results") Results
+  li.link(ng-class="{ active: $state.includes('collected') }")
+    a(ui-sref="collected") Collected Images
