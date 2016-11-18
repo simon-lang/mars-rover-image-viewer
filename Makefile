@@ -1,6 +1,9 @@
 build: deps
 	npm run build
 
+clean:
+	rm -rf build
+
 test: deps
 	npm test
 
