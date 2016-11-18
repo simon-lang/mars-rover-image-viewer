@@ -1,11 +1,11 @@
+build: deps
+	npm run build
+
 test: deps
 	npm test
 
 lint: deps
 	node_modules/.bin/coffeelint src/
-
-build: deps
-	npm run build
 
 dev: deps
 	npm run dev
