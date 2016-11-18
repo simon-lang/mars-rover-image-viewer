@@ -20,6 +20,7 @@ deploy: build
 	git checkout gh-pages
 	cp -R build-tmp/* ./
 	rm -rf build-tmp
+	git add -A
 	git commit -am "update static bundle"
 	git push
 
