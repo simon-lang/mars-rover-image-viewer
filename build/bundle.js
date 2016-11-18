@@ -5177,7 +5177,11 @@
 
 	API_URL = 'https://api.nasa.gov/mars-photos/api/v1/';
 
-	API_KEY = 'wwYXJBLASfX4wNrbLfEetDdx6U3EbRSm1Lx93DGa';
+	if (location.host === 'captainclam.github.io') {
+	  API_KEY = 'P1YSIZOzLqwxUbFxX2Gvj4vNu9Rgs7qjjpEkld3A';
+	} else {
+	  API_KEY = 'wwYXJBLASfX4wNrbLfEetDdx6U3EbRSm1Lx93DGa';
+	}
 
 	module.exports = [
 	  '$http', function($http) {
