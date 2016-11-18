@@ -5118,7 +5118,10 @@
 /***/ function(module, exports) {
 
 	module.exports = [
-	  '$stateProvider', function($stateProvider) {
+	  '$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+	    $urlRouterProvider.when(/^\/?$/, '/results');
+	    $urlRouterProvider.when('', '/results');
+	    $urlRouterProvider.otherwise('/404');
 	    $stateProvider.state({
 	      name: 'results',
 	      url: '/results',
@@ -5243,7 +5246,7 @@
 /* 20 */
 /***/ function(module, exports) {
 
-	module.exports = "<a ui-sref=\"hello\">Hello</a><form ng-submit=\"search()\"><div class=\"form-group\"><label>Rover</label><select class=\"form-control\" ng-model=\"filter.rover\" ng-options=\"rover.label as rover.label for rover in enums.rovers\" ng-change=\"updateManifest()\"></select></div><div class=\"form-group\"><div class=\"input-group\"><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Earth Date\" ng-model=\"searchBy\"/> Earth Date</label><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Martian Sol\" ng-model=\"searchBy\"/> Martian Sol</label></div></div><div class=\"form-group\" ng-if=\"searchBy === 'Martian Sol'\"><select class=\"form-control\" ng-model=\"filter.sol\" ng-options=\"item.sol as item.sol + ' (' + item.total_photos + ' photos)' for item in manifests[filter.rover].photos\"></select></div><div class=\"form-group\" ng-if=\"searchBy !== 'Martian Sol'\"><div class=\"input-group\"><input class=\"form-control\" ng-model=\"filter.date\" uib-datepicker-popup=\"yyyy-MM-d\" datepicker-options=\"dateOptions\" is-open=\"datepickerOpen\" ng-click=\"datepickerOpen = true\"/><span class=\"input-group-btn\"><button class=\"btn btn-default\" type=\"button\" ng-click=\"datepickerOpen = !datepickerOpen\"><i class=\"fa fa-calendar\"></i></button></span></div></div><div class=\"form-group\"><label>Camera</label><select class=\"form-control\" ng-model=\"filter.camera\" ng-options=\"camera.code as camera.label disable when !hasCamera(filter.rover, camera) for camera in enums.cameras\"></select></div><div class=\"form-group clearfix\"><button class=\"btn btn-primary pull-right\" type=\"submit\">Search &nbsp;<i class=\"fa fa-search\"></i></button></div></form>";
+	module.exports = "<form ng-submit=\"search()\"><div class=\"form-group\"><label>Rover</label><select class=\"form-control\" ng-model=\"filter.rover\" ng-options=\"rover.label as rover.label for rover in enums.rovers\" ng-change=\"updateManifest()\"></select></div><div class=\"form-group\"><div class=\"input-group\"><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Earth Date\" ng-model=\"searchBy\"/> Earth Date</label><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Martian Sol\" ng-model=\"searchBy\"/> Martian Sol</label></div></div><div class=\"form-group\" ng-if=\"searchBy === 'Martian Sol'\"><select class=\"form-control\" ng-model=\"filter.sol\" ng-options=\"item.sol as item.sol + ' (' + item.total_photos + ' photos)' for item in manifests[filter.rover].photos\"></select></div><div class=\"form-group\" ng-if=\"searchBy !== 'Martian Sol'\"><div class=\"input-group\"><input class=\"form-control\" ng-model=\"filter.date\" uib-datepicker-popup=\"yyyy-MM-d\" datepicker-options=\"dateOptions\" is-open=\"datepickerOpen\" ng-click=\"datepickerOpen = true\"/><span class=\"input-group-btn\"><button class=\"btn btn-default\" type=\"button\" ng-click=\"datepickerOpen = !datepickerOpen\"><i class=\"fa fa-calendar\"></i></button></span></div></div><div class=\"form-group\"><label>Camera</label><select class=\"form-control\" ng-model=\"filter.camera\" ng-options=\"camera.code as camera.label disable when !hasCamera(filter.rover, camera) for camera in enums.cameras\"></select></div><div class=\"form-group clearfix\"><button class=\"btn btn-primary pull-right\" type=\"submit\">Search &nbsp;<i class=\"fa fa-search\"></i></button></div></form>";
 
 /***/ },
 /* 21 */
@@ -5261,7 +5264,7 @@
 /* 23 */
 /***/ function(module, exports) {
 
-	module.exports = "<ul class=\"nav nav-tabs\"><li class=\"link\" ng-class=\"{ active: pane === 'results'}\"><a ui-sref=\"results\">Results</a></li><li class=\"link\" ng-class=\"{ active: pane === 'collected'}\"><a ui-sref=\"collected\">Collected Images</a></li></ul>";
+	module.exports = "<ul class=\"nav nav-tabs\"><li class=\"link\" ng-class=\"{ active: $state.includes('results') }\"><a ui-sref=\"results\">Results</a></li><li class=\"link\" ng-class=\"{ active: $state.includes('collected') }\"><a ui-sref=\"collected\">Collected Images</a></li></ul>";
 
 /***/ },
 /* 24 */
@@ -5277,9 +5280,9 @@
 	favourites = __webpack_require__(27);
 
 	module.exports = [
-	  '$scope', 'localStorageService', 'photoService', function($scope, localStorageService, photoService) {
+	  '$scope', '$state', 'localStorageService', 'photoService', function($scope, $state, localStorageService, photoService) {
 	    var _updateManifest, filter, isSaved;
-	    $scope.pane = 'results';
+	    $scope.$state = $state;
 	    $scope.searchBy = 'Earth Date';
 	    $scope.manifests = {};
 	    $scope.filter = filter = localStorageService.get('filter') || {
@@ -5362,7 +5365,7 @@
 	      }
 	      localStorageService.set('filter', data);
 	      $scope.error = null;
-	      $scope.pane = 'results';
+	      $state.go('results');
 	      $scope.photos = [];
 	      $scope.loading = true;
 	      return photoService.getPhotos(data).then(function(arg) {
