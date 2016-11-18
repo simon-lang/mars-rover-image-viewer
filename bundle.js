@@ -532,35 +532,19 @@
 /* 15 */
 /***/ function(module, exports) {
 
-	var API_KEY, API_URL, mapToQueryString;
+	var API_KEY, API_URL;
 
 	API_URL = 'https://api.nasa.gov/mars-photos/api/v1/';
 
 	API_KEY = 'wwYXJBLASfX4wNrbLfEetDdx6U3EbRSm1Lx93DGa';
 
-	mapToQueryString = function(data) {
-	  var serialised;
-	  serialised = _.map(data, function(v, k) {
-	    return k + '=' + v;
-	  });
-	  return '?' + serialised.join('&');
-	};
-
 	module.exports = [
 	  '$http', function($http) {
 	    return {
 	      getPhotos: function(filter) {
-	        var url;
-	        url = API_URL + 'rovers/' + filter.rover.toLowerCase() + '/photos' + '?camera=' + filter.camera;
-	        if (filter.sol) {
-	          url += '&sol=' + filter.sol;
-	        } else {
-	          url += '&earth_date=' + moment(filter.earth_date).format('YYYY-M-D');
-	        }
-	        url += '&api_key=' + (API_KEY || 'DEMO_KEY');
 	        return $http({
 	          method: 'GET',
-	          url: url
+	          url: API_URL + 'rovers/' + filter.rover.toLowerCase() + '/photos' + '?camera=' + filter.camera + '&earth_date=' + moment(filter.date).format('YYYY-M-D') + '&api_key=' + (API_KEY || 'DEMO_KEY')
 	        });
 	      },
 	      getManifest: function(rover) {
@@ -613,7 +597,7 @@
 /* 18 */
 /***/ function(module, exports) {
 
-	module.exports = "<form ng-submit=\"search()\"><div class=\"form-group\"><label>Rover</label><select class=\"form-control\" ng-model=\"filter.rover\" ng-options=\"rover.label as rover.label for rover in enums.rovers\" ng-change=\"updateManifest()\"></select></div><div class=\"form-group\"><label>Search By</label><div class=\"input-group\"><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Earth Date\" ng-model=\"searchBy\"/> Earth Date</label><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Martian Sol\" ng-model=\"searchBy\"/> Martian Sol</label></div></div><div class=\"form-group\" ng-if=\"searchBy === 'Martian Sol'\"><label>Martian Sol</label><select class=\"form-control\" ng-model=\"filter.sol\" ng-options=\"item.sol as item.sol + ' (' + item.total_photos + ' photos)' for item in manifests[filter.rover].photos\"></select></div><div class=\"form-group\" ng-if=\"searchBy !== 'Martian Sol'\"><label>Earth Date<small ng-if=\"manifests[filter.rover]\"><em> ({{ manifests[filter.rover].landing_date }} -</em><em> {{ manifests[filter.rover].max_date }})</em></small></label><div class=\"input-group\"><input class=\"form-control\" ng-model=\"filter.date\" uib-datepicker-popup=\"yyyy-MM-d\" datepicker-options=\"dateOptions\" is-open=\"datepickerOpen\" ng-click=\"datepickerOpen = true\"/><span class=\"input-group-btn\"><button class=\"btn btn-default\" type=\"button\" ng-click=\"datepickerOpen = !datepickerOpen\"><i class=\"fa fa-calendar\"></i></button></span></div></div><div class=\"form-group\"><label>Camera</label><select class=\"form-control\" ng-model=\"filter.camera\" ng-options=\"camera.code as camera.label disable when !hasCamera(filter.rover, camera) for camera in enums.cameras\"></select></div><div class=\"form-group clearfix\"><button class=\"btn btn-primary pull-right\" type=\"submit\">Search &nbsp;<i class=\"fa fa-search\"></i></button></div></form>";
+	module.exports = "<form ng-submit=\"search()\"><div class=\"form-group\"><label>Rover</label><select class=\"form-control\" ng-model=\"filter.rover\" ng-options=\"rover.label as rover.label for rover in enums.rovers\" ng-change=\"updateManifest()\"></select></div><div class=\"form-group\"><label>Earth Date<small ng-if=\"manifests[filter.rover]\"><em> ({{ manifests[filter.rover].landing_date }} -</em><em> {{ manifests[filter.rover].max_date }})</em></small></label><div class=\"input-group\"><input class=\"form-control\" ng-model=\"filter.date\" uib-datepicker-popup=\"yyyy-MM-d\" datepicker-options=\"dateOptions\" is-open=\"datepickerOpen\" ng-click=\"datepickerOpen = true\"/><span class=\"input-group-btn\"><button class=\"btn btn-default\" type=\"button\" ng-click=\"datepickerOpen = !datepickerOpen\"><i class=\"fa fa-calendar\"></i></button></span></div></div><div class=\"form-group\"><label>Camera</label><select class=\"form-control\" ng-model=\"filter.camera\" ng-options=\"camera.code as camera.label disable when !hasCamera(filter.rover, camera) for camera in enums.cameras\"></select></div><div class=\"form-group clearfix\"><button class=\"btn btn-primary pull-right\" type=\"submit\">Search &nbsp;<i class=\"fa fa-search\"></i></button></div></form>";
 
 /***/ },
 /* 19 */
@@ -649,11 +633,9 @@
 	  '$scope', 'localStorageService', 'photoService', function($scope, localStorageService, photoService) {
 	    var _updateManifest, filter, isSaved;
 	    $scope.pane = 'results';
-	    $scope.searchBy = 'Martian Sol';
 	    $scope.manifests = {};
 	    $scope.filter = filter = localStorageService.get('filter') || {
 	      date: null,
-	      sol: null,
 	      rover: rovers[0].label,
 	      camera: cameras[0].code
 	    };
@@ -711,21 +693,12 @@
 	      }
 	    };
 	    $scope.search = function() {
-	      var data;
-	      data = _.clone(filter);
-	      if ($scope.searchBy === 'Martian Sol') {
-	        data.sol = filter.sol;
-	        delete data.earth_date;
-	      } else {
-	        data.earth_date = filter.date;
-	        delete data.sol;
-	      }
-	      localStorageService.set('filter', data);
+	      localStorageService.set('filter', filter);
 	      $scope.error = null;
 	      $scope.pane = 'results';
 	      $scope.photos = [];
 	      $scope.loading = true;
-	      return photoService.getPhotos(data).then(function(arg) {
+	      return photoService.getPhotos(filter).then(function(arg) {
 	        var data, ref;
 	        data = arg.data;
 	        if (!data.photos) {
