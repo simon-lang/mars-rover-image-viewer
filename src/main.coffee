@@ -47,6 +47,7 @@ module.exports = [
       $scope.saved = favourites
 
     $scope.findSimilar = (photo) ->
+      $scope.searchBy = 'Earth Date'
       filter.rover = photo.rover.name
       filter.camera = photo.camera.name
       filter.date = moment(photo.earth_date).toDate()
