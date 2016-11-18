@@ -14,6 +14,8 @@ dev: deps
 	npm run dev
 
 deploy: build
+	git add build/
+	git commit -am "commit bundle for deploy"
 	cp -R build build-tmp
 	git checkout gh-pages
 	cp -R build-tmp/* ./
