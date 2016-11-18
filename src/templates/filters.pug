@@ -7,7 +7,7 @@ form(ng-submit="search()")
       ng-change="updateManifest()"
     )
   .form-group
-    label Search By
+    //- label Search By
     .input-group
       label.radio-inline
         input(
@@ -26,13 +26,13 @@ form(ng-submit="search()")
         )
         |  Martian Sol
   .form-group(ng-if="searchBy === 'Martian Sol'")
-    label Martian Sol
+    //- label Martian Sol
     select.form-control(
       ng-model="filter.sol"
       ng-options="item.sol as item.sol + ' (' + item.total_photos + ' photos)' for item in manifests[filter.rover].photos"
     )
   .form-group(ng-if="searchBy !== 'Martian Sol'")
-    label Earth Date
+    //- label Earth Date
       small(ng-if="manifests[filter.rover]")
         em  ({{ manifests[filter.rover].landing_date }} -
         em  {{ manifests[filter.rover].max_date }})
