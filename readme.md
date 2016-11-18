@@ -49,7 +49,6 @@ Use `make lint` to lint the Coffeescript source.
 ## Known Issues
 
 - Date filter is one day off date on photos received.
-- Not sure why font files keep getting copied to the root of this directory during development by webpack
 
 
 ## Disclaimer

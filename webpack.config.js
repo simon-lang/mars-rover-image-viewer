@@ -1,8 +1,11 @@
 module.exports = {
   entry: ['./src/entry.coffee'],
   output: {
-    path: __dirname,
-    filename: './build/bundle.js'
+    path: __dirname + '/build/',
+    filename: 'bundle.js'
+  },
+  devServer: {
+    contentBase: "./build",
   },
   module: {
     loaders: [
