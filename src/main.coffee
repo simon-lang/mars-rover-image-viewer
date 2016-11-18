@@ -3,6 +3,13 @@ cameras = require './enums/cameras.coffee'
 
 favourites = require './favourites.coffee'
 
+encodeIds = (photos) ->
+  ids = photos.map ({id}) -> id
+  btoa ids.join ','
+
+decodeIds = (str) ->
+  atob str.split ','
+
 module.exports = [
   '$scope'
   '$state'
@@ -12,7 +19,7 @@ module.exports = [
 
     $scope.$state = $state
     $scope.searchBy = 'Earth Date'
-    $scope.manifests = {}
+    $scope.manifests = manifests = {}
 
     $scope.filter = filter = localStorageService.get('filter') or
       date: null
@@ -28,7 +35,7 @@ module.exports = [
       cameras: cameras
 
     $scope.photos = []
-    $scope.saved = localStorageService.get('saved') or []
+    $scope.saved = saved = localStorageService.get('saved') or []
 
     $scope.dateOptions = {}
 
@@ -65,6 +72,8 @@ module.exports = [
 
       if $scope.filter.date is null or $scope.filter.date < minDate or $scope.filter.date > maxDate
         $scope.filter.date = moment(manifest.landing_date).toDate()
+
+      drawChart()
 
     $scope.updateManifest = ->
       if $scope.manifests[filter.rover]
@@ -114,5 +123,60 @@ module.exports = [
       rover = _.find rovers, label: rover
       return (camera.rovers | rover.flag) is camera.rovers # bitmask
 
+
+    $scope.currentManifest = ->
+      return manifests[filter.rover]
+
+    $scope.logCode = (s) ->
+      console.log decodeIds s
+
+    $scope.collectionCode = ->
+      if !saved.length
+        return null
+      return encodeIds saved
+
+    $scope.onClick = (points, evt) ->
+      console.log 'todo:'
+      console.log(points, evt)
+
+    $scope.limit = 20
+    $scope.offset = 0
+
+    $scope.decreaseOffset = ->
+      $scope.offset -= $scope.limit
+      drawChart()
+
+    $scope.increaseOffset = ->
+      $scope.offset += $scope.limit
+      drawChart()
+
+    drawChart = ->
+      labels = _.map manifests[filter.rover].photos, (photo) -> 'Sol ' + photo.sol
+      $scope.labels = labels.slice $scope.offset, $scope.offset + $scope.limit
+      $scope.series = ['Photos']
+      data = _.map manifests[filter.rover].photos, (photo) -> photo.total_photos
+      $scope.data = [
+        data.slice $scope.offset, $scope.offset + $scope.limit
+      ]
+
+      $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
+      $scope.options =
+        scales:
+          yAxes: [
+            {
+              id: 'y-axis-1',
+              type: 'linear',
+              display: true,
+              position: 'left'
+            },
+            {
+              id: 'y-axis-2',
+              type: 'linear',
+              display: true,
+              position: 'right'
+            }
+          ]
+
     $scope.updateManifest()
+
 ]

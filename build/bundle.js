@@ -60,7 +60,7 @@
 
 	__webpack_require__(13);
 
-	app = angular.module('mars-rover-image-viewer', ['ui.bootstrap', 'ui.router']);
+	app = angular.module('mars-rover-image-viewer', ['ui.bootstrap', 'ui.router', 'chart.js']);
 
 	app.config(__webpack_require__(15));
 
@@ -5394,6 +5394,36 @@
 	        label: rover
 	      });
 	      return (camera.rovers | rover.flag) === camera.rovers;
+	    };
+	    $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+	    $scope.series = ['Series A', 'Series B'];
+	    $scope.data = [[65, 59, 80, 81, 56, 55, 40], [28, 48, 40, 19, 86, 27, 90]];
+	    $scope.onClick = function(points, evt) {
+	      return console.log(points, evt);
+	    };
+	    $scope.datasetOverride = [
+	      {
+	        yAxisID: 'y-axis-1'
+	      }, {
+	        yAxisID: 'y-axis-2'
+	      }
+	    ];
+	    $scope.options = {
+	      scales: {
+	        yAxes: [
+	          {
+	            id: 'y-axis-1',
+	            type: 'linear',
+	            display: true,
+	            position: 'left'
+	          }, {
+	            id: 'y-axis-2',
+	            type: 'linear',
+	            display: true,
+	            position: 'right'
+	          }
+	        ]
+	      }
 	    };
 	    return $scope.updateManifest();
 	  }

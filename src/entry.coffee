@@ -6,6 +6,7 @@ require './less/main.less'
 app = angular.module 'mars-rover-image-viewer', [
   'ui.bootstrap'
   'ui.router'
+  'chart.js'
 ]
 
 app.config require './routing.coffee'

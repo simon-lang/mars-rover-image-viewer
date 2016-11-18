@@ -18,3 +18,8 @@
       div {{ photo.camera.name }} ({{ photo.camera.full_name }})
       div
         a.link(ng-click="findSimilar(photo)") See Similar
+
+  .share-code.no-content(ng-if="collectionCode()") Share with this code:
+    h2.brand-font
+      a(ng-click="logCode(collectionCode())")
+        | {{ collectionCode() }}
