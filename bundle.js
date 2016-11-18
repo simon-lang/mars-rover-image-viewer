@@ -60,25 +60,25 @@
 
 	__webpack_require__(13);
 
-	app = angular.module('mars-rover-image-viewer', ['ui.bootstrap', 'ui.router', 'chart.js']);
+	app = angular.module('mars-rover-image-viewer', ['ui.bootstrap', 'ui.router']);
 
 	app.config(__webpack_require__(15));
 
-	app.service('localStorageService', __webpack_require__(17));
+	app.service('localStorageService', __webpack_require__(16));
 
-	app.service('photoService', __webpack_require__(18));
+	app.service('photoService', __webpack_require__(17));
 
 	directives = ['header', 'tabs', 'filters', 'results', 'collected'];
 
 	_.each(directives, function(directive) {
 	  return app.directive(directive, function() {
 	    return {
-	      template: __webpack_require__(19)("./" + directive + '.pug')
+	      template: __webpack_require__(18)("./" + directive + '.pug')
 	    };
 	  });
 	});
 
-	app.controller('MainController', __webpack_require__(25));
+	app.controller('MainController', __webpack_require__(24));
 
 
 /***/ },
@@ -5108,14 +5108,14 @@
 
 
 	// module
-	exports.push([module.id, ".margin {\n  margin: 1em;\n}\n.link {\n  cursor: pointer;\n}\n.padded {\n  padding: 1em;\n}\n.text-center {\n  text-align: center;\n}\n.space-before {\n  margin-top: 1em;\n}\n.brand-font {\n  font-family: 'Quantico', sans-serif;\n}\nbody {\n  font-family: 'Quantico', sans-serif;\n}\n.loading,\n.no-content {\n  text-align: center;\n  padding: 4em 0;\n}\n.results,\n.collected-images,\n.manifest {\n  border: 1px solid #464545;\n  border-top: none;\n}\n.photo img {\n  width: 100%;\n}\n.header {\n  background: #111;\n  margin-bottom: 1em;\n  padding-bottom: 1em;\n}\n.header i {\n  float: right;\n}\n.section-heading {\n  margin-top: 0;\n  padding-top: 0;\n}\n.share-code {\n  padding: 1em;\n  max-width: 100%;\n  overflow: hidden;\n  text-align: center;\n}\n", ""]);
+	exports.push([module.id, ".margin {\n  margin: 1em;\n}\n.link {\n  cursor: pointer;\n}\n.padded {\n  padding: 1em;\n}\n.text-center {\n  text-align: center;\n}\n.space-before {\n  margin-top: 1em;\n}\n.loading,\n.no-content {\n  text-align: center;\n  padding: 4em 0;\n}\n.results,\n.collected-images {\n  border: 1px solid #464545;\n  border-top: none;\n}\n.photo img {\n  width: 100%;\n}\n.header {\n  background: #111;\n  margin-bottom: 1em;\n  padding-bottom: 1em;\n}\n.header i {\n  float: right;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
 /* 15 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	module.exports = [
 	  '$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
@@ -5127,15 +5127,10 @@
 	      url: '/results',
 	      template: '<results></results>'
 	    });
-	    $stateProvider.state({
+	    return $stateProvider.state({
 	      name: 'collected',
 	      url: '/collected',
 	      template: '<collected></collected>'
-	    });
-	    return $stateProvider.state({
-	      name: 'manifest',
-	      url: '/manifest',
-	      template: __webpack_require__(16)
 	    });
 	  }
 	];
@@ -5143,12 +5138,6 @@
 
 /***/ },
 /* 16 */
-/***/ function(module, exports) {
-
-	module.exports = "<div class=\"manifest padded\"><h3 class=\"brand-font section-heading\">Mission Manifest for {{ filter.rover }}<small ng-if=\"manifests[filter.rover]\"><em> ({{ manifests[filter.rover].landing_date }} -</em><em> {{ manifests[filter.rover].max_date }})</em></small></h3><canvas class=\"chart chart-bar\" id=\"bar\" chart-data=\"data\" chart-labels=\"labels\" chart-series=\"series\" chart-options=\"options\" chart-dataset-override=\"datasetOverride\" chart-click=\"selectSol\"></canvas><div class=\"clearfix\"><a class=\"link pull-left btn btn-link\" ng-click=\"decreaseOffset()\"><i class=\"fa fa-caret-left\"></i> Previous {{limit}} days</a><a class=\"link pull-right btn btn-link\" ng-click=\"increaseOffset()\"> Next {{limit}} days &nbsp;<i class=\"fa fa-caret-right\"></i></a></div></div>";
-
-/***/ },
-/* 17 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -5181,14 +5170,18 @@
 
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports) {
 
 	var API_KEY, API_URL;
 
 	API_URL = 'https://api.nasa.gov/mars-photos/api/v1/';
 
-	API_KEY = 'wwYXJBLASfX4wNrbLfEetDdx6U3EbRSm1Lx93DGa';
+	if (location.host === 'captainclam.github.io') {
+	  API_KEY = 'P1YSIZOzLqwxUbFxX2Gvj4vNu9Rgs7qjjpEkld3A';
+	} else {
+	  API_KEY = 'wwYXJBLASfX4wNrbLfEetDdx6U3EbRSm1Lx93DGa';
+	}
 
 	module.exports = [
 	  '$http', function($http) {
@@ -5196,7 +5189,7 @@
 	      getPhotos: function(filter) {
 	        var url;
 	        url = API_URL + 'rovers/' + filter.rover.toLowerCase() + '/photos' + '?camera=' + filter.camera;
-	        if (filter.sol != null) {
+	        if (filter.sol) {
 	          url += '&sol=' + filter.sol;
 	        } else {
 	          url += '&earth_date=' + moment(filter.earth_date).format('YYYY-M-D');
@@ -5223,16 +5216,15 @@
 
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./collected.pug": 20,
-		"./filters.pug": 21,
-		"./header.pug": 22,
-		"./manifest.pug": 16,
-		"./results.pug": 23,
-		"./tabs.pug": 24
+		"./collected.pug": 19,
+		"./filters.pug": 20,
+		"./header.pug": 21,
+		"./results.pug": 22,
+		"./tabs.pug": 23
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -5245,72 +5237,58 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 19;
+	webpackContext.id = 18;
 
+
+/***/ },
+/* 19 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"collected-images padded\"><div class=\"no-content\" ng-if=\"saved.length === 0\"><p>No saved photos</p><p><a class=\"link\" ng-click=\"import()\">Want to see some pre-selected ones?</a></p></div><div class=\"photo\" ng-repeat=\"photo in saved\"><img class=\"img-responsive\" ng-src=\"{{photo.img_src}}\"/><div class=\"well\"><h4><a class=\"btn btn-danger pull-right\" ng-click=\"save(photo)\">Remove From Collection</a>{{ photo.rover.name }}</h4><div>{{ photo.earth_date }}</div><div>{{ photo.camera.name }} ({{ photo.camera.full_name }})</div><div><a class=\"link\" ng-click=\"findSimilar(photo)\">See Similar</a></div></div></div></div>";
 
 /***/ },
 /* 20 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"collected-images padded\"><div class=\"no-content\" ng-if=\"saved.length === 0\"><p>No saved photos</p><p><a class=\"link\" ng-click=\"import()\">Want to see some pre-selected ones?</a></p></div><div class=\"photo\" ng-repeat=\"photo in saved\"><img class=\"img-responsive\" ng-src=\"{{photo.img_src}}\"/><div class=\"well\"><h4><a class=\"btn btn-danger pull-right\" ng-click=\"save(photo)\">Remove From Collection</a>{{ photo.rover.name }}</h4><div>{{ photo.earth_date }}</div><div>{{ photo.camera.name }} ({{ photo.camera.full_name }})</div><div><a class=\"link\" ng-click=\"findSimilar(photo)\">See Similar</a></div></div></div><div class=\"share-code no-content\" ng-if=\"collectionCode()\">Share with this code:<h2 class=\"brand-font\"><a ng-click=\"logCode(collectionCode())\">{{ collectionCode() }}</a></h2></div></div>";
+	module.exports = "<form ng-submit=\"search()\"><div class=\"form-group\"><label>Rover</label><select class=\"form-control\" ng-model=\"filter.rover\" ng-options=\"rover.label as rover.label for rover in enums.rovers\" ng-change=\"updateManifest()\"></select></div><div class=\"form-group\"><div class=\"input-group\"><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Earth Date\" ng-model=\"searchBy\"/> Earth Date</label><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Martian Sol\" ng-model=\"searchBy\"/> Martian Sol</label></div></div><div class=\"form-group\" ng-if=\"searchBy === 'Martian Sol'\"><select class=\"form-control\" ng-model=\"filter.sol\" ng-options=\"item.sol as item.sol + ' (' + item.total_photos + ' photos)' for item in manifests[filter.rover].photos\"></select></div><div class=\"form-group\" ng-if=\"searchBy !== 'Martian Sol'\"><div class=\"input-group\"><input class=\"form-control\" ng-model=\"filter.date\" uib-datepicker-popup=\"yyyy-MM-d\" datepicker-options=\"dateOptions\" is-open=\"datepickerOpen\" ng-click=\"datepickerOpen = true\"/><span class=\"input-group-btn\"><button class=\"btn btn-default\" type=\"button\" ng-click=\"datepickerOpen = !datepickerOpen\"><i class=\"fa fa-calendar\"></i></button></span></div></div><div class=\"form-group\"><label>Camera</label><select class=\"form-control\" ng-model=\"filter.camera\" ng-options=\"camera.code as camera.label disable when !hasCamera(filter.rover, camera) for camera in enums.cameras\"></select></div><div class=\"form-group clearfix\"><button class=\"btn btn-primary pull-right\" type=\"submit\">Search &nbsp;<i class=\"fa fa-search\"></i></button></div></form>";
 
 /***/ },
 /* 21 */
 /***/ function(module, exports) {
 
-	module.exports = "<form ng-submit=\"search()\"><div class=\"form-group\"><label>Rover</label><select class=\"form-control\" ng-model=\"filter.rover\" ng-options=\"rover.label as rover.label for rover in enums.rovers\" ng-change=\"updateManifest()\"></select></div><div class=\"form-group\"><div class=\"input-group\"><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Earth Date\" ng-model=\"searchBy\"/> Earth Date</label><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Martian Sol\" ng-model=\"searchBy\"/> Martian Sol</label></div></div><div class=\"form-group\" ng-if=\"searchBy === 'Martian Sol'\"><select class=\"form-control\" ng-model=\"filter.sol\" ng-options=\"item.sol as item.sol + ' (' + item.total_photos + ' photos)' for item in manifests[filter.rover].photos\"></select></div><div class=\"form-group\" ng-if=\"searchBy !== 'Martian Sol'\"><div class=\"input-group\"><input class=\"form-control\" ng-model=\"filter.date\" uib-datepicker-popup=\"yyyy-MM-d\" datepicker-options=\"dateOptions\" is-open=\"datepickerOpen\" ng-click=\"datepickerOpen = true\"/><span class=\"input-group-btn\"><button class=\"btn btn-default\" type=\"button\" ng-click=\"datepickerOpen = !datepickerOpen\"><i class=\"fa fa-calendar\"></i></button></span></div></div><div class=\"form-group\"><label>Camera</label><select class=\"form-control\" ng-model=\"filter.camera\" ng-options=\"camera.code as camera.label disable when !hasCamera(filter.rover, camera) for camera in enums.cameras\"></select></div><div class=\"form-group clearfix\"><button class=\"btn btn-primary pull-right\" type=\"submit\" ng-class=\"{disabled: loading}\">Search &nbsp;<i class=\"fa fa-search\"></i></button></div></form>";
+	module.exports = "<div class=\"header\"><div class=\"container\"><div class=\"row\"><div class=\"col-md-12\"><h1><i class=\"fa fa-rocket\"></i> Mars Rover Image Viewer</h1></div></div></div></div>";
 
 /***/ },
 /* 22 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"header\"><div class=\"container\"><div class=\"row\"><div class=\"col-md-12\"><h1 class=\"brand-font\"><i class=\"fa fa-rocket\"></i> Mars Rover Image Viewer</h1></div></div></div></div>";
+	module.exports = "<div class=\"results padded\"><div class=\"no-content\" ng-if=\"photos.length === 0 &amp;&amp; !error &amp;&amp; !loading\">Search to see some results</div><div class=\"no-content\" ng-if=\"error\">{{ error }}</div><div class=\"loading\" ng-if=\"loading\">Loading...</div><div class=\"photo\" ng-repeat=\"photo in photos | limitTo:20\"><img class=\"img-responsive\" ng-src=\"{{photo.img_src}}\"/><div class=\"well\"><h4><a class=\"btn pull-right\" ng-click=\"save(photo)\" ng-class=\"{ 'btn-success': photo.saved, 'btn-default': '!photo.saved' }\"><i class=\"fa fa-check\" ng-if=\"photo.saved\"></i><i class=\"fa fa-save\" ng-if=\"!photo.saved\"></i> {{ photo.saved ? 'Saved' : 'Save' }}</a>{{ photo.rover.name }}</h4><div>{{ photo.earth_date }}</div><div>{{ photo.camera.name }} ({{ photo.camera.full_name }})</div></div><pre class=\"well\" ng-if=\"photo.showRaw\">{{ photo | json }}</pre></div></div>";
 
 /***/ },
 /* 23 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"results padded\"><div class=\"no-content\" ng-if=\"photos.length === 0 &amp;&amp; !error &amp;&amp; !loading\">Search to see some results</div><div class=\"no-content\" ng-if=\"error\">{{ error }}</div><div class=\"loading\" ng-if=\"loading\">Loading...</div><div class=\"photo\" ng-repeat=\"photo in photos | limitTo:20\"><img class=\"img-responsive\" ng-src=\"{{photo.img_src}}\"/><div class=\"well\"><h4><a class=\"btn pull-right\" ng-click=\"save(photo)\" ng-class=\"{ 'btn-success': photo.saved, 'btn-default': '!photo.saved' }\"><i class=\"fa fa-check\" ng-if=\"photo.saved\"></i><i class=\"fa fa-save\" ng-if=\"!photo.saved\"></i> {{ photo.saved ? 'Saved' : 'Save' }}</a>{{ photo.rover.name }}</h4><div>{{ photo.earth_date }}</div><div>{{ photo.camera.name }} ({{ photo.camera.full_name }})</div></div><pre class=\"well\" ng-if=\"photo.showRaw\">{{ photo | json }}</pre></div></div>";
+	module.exports = "<ul class=\"nav nav-tabs\"><li class=\"link\" ng-class=\"{ active: $state.includes('results') }\"><a ui-sref=\"results\">Results</a></li><li class=\"link\" ng-class=\"{ active: $state.includes('collected') }\"><a ui-sref=\"collected\">Collected Images</a></li></ul>";
 
 /***/ },
 /* 24 */
-/***/ function(module, exports) {
-
-	module.exports = "<ul class=\"nav nav-tabs\"><li class=\"link\" ng-class=\"{ active: $state.includes('results') }\"><a ui-sref=\"results\">Results</a></li><li class=\"link\" ng-class=\"{ active: $state.includes('manifest'), disabled: !currentManifest() }\"><a ui-sref=\"manifest\">Manifest</a></li><li class=\"link\" ng-class=\"{ active: $state.includes('collected') }\"><a ui-sref=\"collected\">Collected Images</a></li></ul>";
-
-/***/ },
-/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var cameras, decodeIds, encodeIds, favourites, rovers,
+	var cameras, favourites, rovers,
 	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-	rovers = __webpack_require__(26);
+	rovers = __webpack_require__(25);
 
-	cameras = __webpack_require__(27);
+	cameras = __webpack_require__(26);
 
-	favourites = __webpack_require__(28);
-
-	encodeIds = function(photos) {
-	  var ids;
-	  ids = photos.map(function(arg) {
-	    var id;
-	    id = arg.id;
-	    return id;
-	  });
-	  return btoa(ids.join(','));
-	};
-
-	decodeIds = function(str) {
-	  return atob(str.split(','));
-	};
+	favourites = __webpack_require__(27);
 
 	module.exports = [
 	  '$scope', '$state', 'localStorageService', 'photoService', function($scope, $state, localStorageService, photoService) {
-	    var _updateManifest, drawChart, filter, isSaved, manifests, saved;
+	    var _updateManifest, filter, isSaved;
 	    $scope.$state = $state;
 	    $scope.searchBy = 'Earth Date';
-	    $scope.manifests = manifests = {};
+	    $scope.manifests = {};
 	    $scope.filter = filter = localStorageService.get('filter') || {
 	      date: null,
 	      sol: null,
@@ -5325,7 +5303,7 @@
 	      cameras: cameras
 	    };
 	    $scope.photos = [];
-	    $scope.saved = saved = localStorageService.get('saved') || [];
+	    $scope.saved = localStorageService.get('saved') || [];
 	    $scope.dateOptions = {};
 	    isSaved = function(photo) {
 	      var existing;
@@ -5367,9 +5345,8 @@
 	        filter.sol = 1;
 	      }
 	      if ($scope.filter.date === null || $scope.filter.date < minDate || $scope.filter.date > maxDate) {
-	        $scope.filter.date = moment(manifest.landing_date).toDate();
+	        return $scope.filter.date = moment(manifest.landing_date).toDate();
 	      }
-	      return drawChart();
 	    };
 	    $scope.updateManifest = function() {
 	      if ($scope.manifests[filter.rover]) {
@@ -5382,9 +5359,6 @@
 	    };
 	    $scope.search = function() {
 	      var data;
-	      if ($scope.loading) {
-	        return;
-	      }
 	      data = _.clone(filter);
 	      if ($scope.searchBy === 'Martian Sol') {
 	        data.sol = filter.sol;
@@ -5416,86 +5390,14 @@
 	      });
 	    };
 	    $scope.hasCamera = function(rover, camera) {
-	      var ref, ref1;
-	      if ($scope.searchBy === 'Martian Sol' && (((ref = $scope.manifests[filter.rover]) != null ? ref.photos[filter.sol] : void 0) != null)) {
-	        return ref1 = camera.code, indexOf.call($scope.manifests[filter.rover].photos[filter.sol].cameras, ref1) >= 0;
+	      var ref;
+	      if ($scope.searchBy === 'Martian Sol' && $scope.manifests[filter.rover]) {
+	        return ref = camera.code, indexOf.call($scope.manifests[filter.rover].photos[filter.sol].cameras, ref) >= 0;
 	      }
 	      rover = _.find(rovers, {
 	        label: rover
 	      });
 	      return (camera.rovers | rover.flag) === camera.rovers;
-	    };
-	    $scope.currentManifest = function() {
-	      return manifests[filter.rover];
-	    };
-	    $scope.logCode = function(s) {
-	      return console.log(decodeIds(s));
-	    };
-	    $scope.collectionCode = function() {
-	      if (!saved.length) {
-	        return null;
-	      }
-	      return encodeIds(saved);
-	    };
-	    $scope.selectSol = function(points, evt) {
-	      var entry, ref, sol;
-	      sol = parseInt(points[0].label.split('Sol ')[1]);
-	      entry = _.find($scope.currentManifest().photos, {
-	        sol: sol
-	      });
-	      if (ref = filter.camera, indexOf.call(entry.cameras, ref) < 0) {
-	        console.log('HAD TO UPDATE CAMERA BECAUSE', filter.camera, 'not in ', entry.cameras);
-	        filter.camera = entry.cameras[0];
-	      }
-	      filter.sol = sol;
-	      $scope.searchBy = 'Martian Sol';
-	      return $scope.search();
-	    };
-	    $scope.limit = 20;
-	    $scope.offset = 0;
-	    $scope.decreaseOffset = function() {
-	      $scope.offset -= $scope.limit;
-	      return drawChart();
-	    };
-	    $scope.increaseOffset = function() {
-	      $scope.offset += $scope.limit;
-	      return drawChart();
-	    };
-	    drawChart = function() {
-	      var data, labels;
-	      labels = _.map(manifests[filter.rover].photos, function(photo) {
-	        return 'Sol ' + photo.sol;
-	      });
-	      $scope.labels = labels.slice($scope.offset, $scope.offset + $scope.limit);
-	      $scope.series = ['Photos'];
-	      data = _.map(manifests[filter.rover].photos, function(photo) {
-	        return photo.total_photos;
-	      });
-	      $scope.data = [data.slice($scope.offset, $scope.offset + $scope.limit)];
-	      $scope.datasetOverride = [
-	        {
-	          yAxisID: 'y-axis-1'
-	        }, {
-	          yAxisID: 'y-axis-2'
-	        }
-	      ];
-	      return $scope.options = {
-	        scales: {
-	          yAxes: [
-	            {
-	              id: 'y-axis-1',
-	              type: 'linear',
-	              display: true,
-	              position: 'left'
-	            }, {
-	              id: 'y-axis-2',
-	              type: 'linear',
-	              display: true,
-	              position: 'right'
-	            }
-	          ]
-	        }
-	      };
 	    };
 	    return $scope.updateManifest();
 	  }
@@ -5503,7 +5405,7 @@
 
 
 /***/ },
-/* 26 */
+/* 25 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -5521,7 +5423,7 @@
 
 
 /***/ },
-/* 27 */
+/* 26 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -5566,105 +5468,11 @@
 
 
 /***/ },
-/* 28 */
+/* 27 */
 /***/ function(module, exports) {
 
 	module.exports = [
 	  {
-	    "id": 76994,
-	    "sol": 476,
-	    "camera": {
-	      "id": 24,
-	      "name": "MAHLI",
-	      "rover_id": 5,
-	      "full_name": "Mars Hand Lens Imager"
-	    },
-	    "img_src": "http://mars.jpl.nasa.gov/msl-raw-images/msss/00476/mhli/0476MH0264000000E1_DXXX.jpg",
-	    "earth_date": "2013-12-08",
-	    "rover": {
-	      "id": 5,
-	      "name": "Curiosity",
-	      "landing_date": "2012-08-06",
-	      "launch_date": "2011-11-26",
-	      "status": "active",
-	      "max_sol": 1522,
-	      "max_date": "2016-11-16",
-	      "total_photos": 288812,
-	      "cameras": [
-	        {
-	          "name": "FHAZ",
-	          "full_name": "Front Hazard Avoidance Camera"
-	        }, {
-	          "name": "NAVCAM",
-	          "full_name": "Navigation Camera"
-	        }, {
-	          "name": "MAST",
-	          "full_name": "Mast Camera"
-	        }, {
-	          "name": "CHEMCAM",
-	          "full_name": "Chemistry and Camera Complex"
-	        }, {
-	          "name": "MAHLI",
-	          "full_name": "Mars Hand Lens Imager"
-	        }, {
-	          "name": "MARDI",
-	          "full_name": "Mars Descent Imager"
-	        }, {
-	          "name": "RHAZ",
-	          "full_name": "Rear Hazard Avoidance Camera"
-	        }
-	      ]
-	    },
-	    "saved": true,
-	    "$$hashKey": "object:40"
-	  }, {
-	    "id": 76991,
-	    "sol": 476,
-	    "camera": {
-	      "id": 24,
-	      "name": "MAHLI",
-	      "rover_id": 5,
-	      "full_name": "Mars Hand Lens Imager"
-	    },
-	    "img_src": "http://mars.jpl.nasa.gov/msl-raw-images/msss/00476/mhli/0476MH0095001000C0_DXXX.jpg",
-	    "earth_date": "2013-12-08",
-	    "rover": {
-	      "id": 5,
-	      "name": "Curiosity",
-	      "landing_date": "2012-08-06",
-	      "launch_date": "2011-11-26",
-	      "status": "active",
-	      "max_sol": 1522,
-	      "max_date": "2016-11-16",
-	      "total_photos": 288812,
-	      "cameras": [
-	        {
-	          "name": "FHAZ",
-	          "full_name": "Front Hazard Avoidance Camera"
-	        }, {
-	          "name": "NAVCAM",
-	          "full_name": "Navigation Camera"
-	        }, {
-	          "name": "MAST",
-	          "full_name": "Mast Camera"
-	        }, {
-	          "name": "CHEMCAM",
-	          "full_name": "Chemistry and Camera Complex"
-	        }, {
-	          "name": "MAHLI",
-	          "full_name": "Mars Hand Lens Imager"
-	        }, {
-	          "name": "MARDI",
-	          "full_name": "Mars Descent Imager"
-	        }, {
-	          "name": "RHAZ",
-	          "full_name": "Rear Hazard Avoidance Camera"
-	        }
-	      ]
-	    },
-	    "saved": true,
-	    "$$hashKey": "object:31"
-	  }, {
 	    "id": 67629,
 	    "sol": 868,
 	    "camera": {
