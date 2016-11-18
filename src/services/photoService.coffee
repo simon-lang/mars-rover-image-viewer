@@ -6,7 +6,7 @@ module.exports = [
   ($http) ->
     getPhotos: (filter) ->
       url = API_URL + 'rovers/' + filter.rover.toLowerCase() + '/photos' + '?camera=' + filter.camera
-      if filter.sol
+      if filter.sol?
         url += '&sol=' + filter.sol
       else
         url += '&earth_date=' + moment(filter.earth_date).format('YYYY-M-D')

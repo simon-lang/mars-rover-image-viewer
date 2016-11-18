@@ -5,9 +5,6 @@
       em  ({{ manifests[filter.rover].landing_date }} -
       em  {{ manifests[filter.rover].max_date }})
 
-  //- .no-content
-    | Coming Soon
-
   canvas(
     id="bar"
     class="chart chart-bar"
@@ -16,7 +13,7 @@
     chart-series="series"
     chart-options="options"
     chart-dataset-override="datasetOverride"
-    chart-click="onClick"
+    chart-click="selectSol"
   )
 
   .clearfix
@@ -27,6 +24,8 @@
     a.link.pull-right.btn.btn-link(ng-click="increaseOffset()")
       |  Next {{limit}} days &nbsp;
       i.fa.fa-caret-right
+
+  //- pre {{selectedManifestEntry | json}}
 
   //- div(ng-repeat="photo in manifests[filter.rover].photos")
     span Sol {{ photo.sol }}

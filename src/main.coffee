@@ -85,6 +85,8 @@ module.exports = [
           console.warn 'ERR', err
 
     $scope.search = ->
+      if $scope.loading
+        return
       data = _.clone filter
       if $scope.searchBy is 'Martian Sol'
         data.sol = filter.sol
@@ -118,11 +120,10 @@ module.exports = [
     # Any camera that exists on the new rover, will need to increment its
     #  rovers field by 8.
     $scope.hasCamera = (rover, camera) ->
-      if $scope.searchBy is 'Martian Sol' and $scope.manifests[filter.rover]
+      if $scope.searchBy is 'Martian Sol' and $scope.manifests[filter.rover]?.photos[filter.sol]?
         return camera.code in $scope.manifests[filter.rover].photos[filter.sol].cameras
       rover = _.find rovers, label: rover
       return (camera.rovers | rover.flag) is camera.rovers # bitmask
-
 
     $scope.currentManifest = ->
       return manifests[filter.rover]
@@ -135,9 +136,16 @@ module.exports = [
         return null
       return encodeIds saved
 
-    $scope.onClick = (points, evt) ->
-      console.log 'todo:'
-      console.log(points, evt)
+    $scope.selectSol = (points, evt) ->
+      # console.log points[0]
+      sol = parseInt points[0].label.split('Sol ')[1] # todo: got to be a nicer way
+      entry = _.find $scope.currentManifest().photos, {sol}
+      unless filter.camera in entry.cameras
+        console.log 'HAD TO UPDATE CAMERA BECAUSE', filter.camera, 'not in ', entry.cameras
+        filter.camera = entry.cameras[0]
+      filter.sol = sol
+      $scope.searchBy = 'Martian Sol'
+      $scope.search()
 
     $scope.limit = 20
     $scope.offset = 0
