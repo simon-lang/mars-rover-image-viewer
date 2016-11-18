@@ -5108,7 +5108,7 @@
 
 
 	// module
-	exports.push([module.id, ".margin {\n  margin: 1em;\n}\n.link {\n  cursor: pointer;\n}\n.padded {\n  padding: 1em;\n}\n.text-center {\n  text-align: center;\n}\n.space-before {\n  margin-top: 1em;\n}\n.brand-font {\n  font-family: 'Quantico', sans-serif;\n}\n.loading,\n.no-content {\n  text-align: center;\n  padding: 4em 0;\n}\n.results,\n.collected-images,\n.manifest {\n  border: 1px solid #464545;\n  border-top: none;\n}\n.photo img {\n  width: 100%;\n}\n.header {\n  background: #111;\n  margin-bottom: 1em;\n  padding-bottom: 1em;\n}\n.header i {\n  float: right;\n}\n.section-heading {\n  margin-top: 0;\n  padding-top: 0;\n}\n.share-code {\n  padding: 1em;\n  max-width: 100%;\n  overflow: hidden;\n  text-align: center;\n}\n", ""]);
+	exports.push([module.id, ".margin {\n  margin: 1em;\n}\n.link {\n  cursor: pointer;\n}\n.padded {\n  padding: 1em;\n}\n.text-center {\n  text-align: center;\n}\n.space-before {\n  margin-top: 1em;\n}\n.brand-font {\n  font-family: 'Quantico', sans-serif;\n}\nbody {\n  font-family: 'Quantico', sans-serif;\n}\n.loading,\n.no-content {\n  text-align: center;\n  padding: 4em 0;\n}\n.results,\n.collected-images,\n.manifest {\n  border: 1px solid #464545;\n  border-top: none;\n}\n.photo img {\n  width: 100%;\n}\n.header {\n  background: #111;\n  margin-bottom: 1em;\n  padding-bottom: 1em;\n}\n.header i {\n  float: right;\n}\n.section-heading {\n  margin-top: 0;\n  padding-top: 0;\n}\n.share-code {\n  padding: 1em;\n  max-width: 100%;\n  overflow: hidden;\n  text-align: center;\n}\n", ""]);
 
 	// exports
 
@@ -5145,7 +5145,7 @@
 /* 16 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"manifest padded\"><h3 class=\"brand-font section-heading\">Mission Manifest for {{ filter.rover }}<small ng-if=\"manifests[filter.rover]\"><em> ({{ manifests[filter.rover].landing_date }} -</em><em> {{ manifests[filter.rover].max_date }})</em></small></h3><canvas class=\"chart chart-bar\" id=\"bar\" chart-data=\"data\" chart-labels=\"labels\" chart-series=\"series\" chart-options=\"options\" chart-dataset-override=\"datasetOverride\" chart-click=\"onClick\"></canvas><div class=\"clearfix\"><a class=\"link pull-left btn btn-link\" ng-click=\"decreaseOffset()\"><i class=\"fa fa-caret-left\"></i> Previous {{limit}} days</a><a class=\"link pull-right btn btn-link\" ng-click=\"increaseOffset()\"> Next {{limit}} days &nbsp;<i class=\"fa fa-caret-right\"></i></a></div></div>";
+	module.exports = "<div class=\"manifest padded\"><h3 class=\"brand-font section-heading\">Mission Manifest for {{ filter.rover }}<small ng-if=\"manifests[filter.rover]\"><em> ({{ manifests[filter.rover].landing_date }} -</em><em> {{ manifests[filter.rover].max_date }})</em></small></h3><canvas class=\"chart chart-bar\" id=\"bar\" chart-data=\"data\" chart-labels=\"labels\" chart-series=\"series\" chart-options=\"options\" chart-dataset-override=\"datasetOverride\" chart-click=\"selectSol\"></canvas><div class=\"clearfix\"><a class=\"link pull-left btn btn-link\" ng-click=\"decreaseOffset()\"><i class=\"fa fa-caret-left\"></i> Previous {{limit}} days</a><a class=\"link pull-right btn btn-link\" ng-click=\"increaseOffset()\"> Next {{limit}} days &nbsp;<i class=\"fa fa-caret-right\"></i></a></div></div>";
 
 /***/ },
 /* 17 */
@@ -5258,13 +5258,13 @@
 /* 21 */
 /***/ function(module, exports) {
 
-	module.exports = "<form ng-submit=\"search()\"><div class=\"form-group\"><label>Rover</label><select class=\"form-control\" ng-model=\"filter.rover\" ng-options=\"rover.label as rover.label for rover in enums.rovers\" ng-change=\"updateManifest()\"></select></div><div class=\"form-group\"><div class=\"input-group\"><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Earth Date\" ng-model=\"searchBy\"/> Earth Date</label><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Martian Sol\" ng-model=\"searchBy\"/> Martian Sol</label></div></div><div class=\"form-group\" ng-if=\"searchBy === 'Martian Sol'\"><select class=\"form-control\" ng-model=\"filter.sol\" ng-options=\"item.sol as item.sol + ' (' + item.total_photos + ' photos)' for item in manifests[filter.rover].photos\"></select></div><div class=\"form-group\" ng-if=\"searchBy !== 'Martian Sol'\"><div class=\"input-group\"><input class=\"form-control\" ng-model=\"filter.date\" uib-datepicker-popup=\"yyyy-MM-d\" datepicker-options=\"dateOptions\" is-open=\"datepickerOpen\" ng-click=\"datepickerOpen = true\"/><span class=\"input-group-btn\"><button class=\"btn btn-default\" type=\"button\" ng-click=\"datepickerOpen = !datepickerOpen\"><i class=\"fa fa-calendar\"></i></button></span></div></div><div class=\"form-group\"><label>Camera</label><select class=\"form-control\" ng-model=\"filter.camera\" ng-options=\"camera.code as camera.label disable when !hasCamera(filter.rover, camera) for camera in enums.cameras\"></select></div><div class=\"form-group clearfix\"><button class=\"btn btn-primary pull-right\" type=\"submit\">Search &nbsp;<i class=\"fa fa-search\"></i></button></div></form>";
+	module.exports = "<form ng-submit=\"search()\"><div class=\"form-group\"><label>Rover</label><select class=\"form-control\" ng-model=\"filter.rover\" ng-options=\"rover.label as rover.label for rover in enums.rovers\" ng-change=\"updateManifest()\"></select></div><div class=\"form-group\"><div class=\"input-group\"><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Earth Date\" ng-model=\"searchBy\"/> Earth Date</label><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Martian Sol\" ng-model=\"searchBy\"/> Martian Sol</label></div></div><div class=\"form-group\" ng-if=\"searchBy === 'Martian Sol'\"><select class=\"form-control\" ng-model=\"filter.sol\" ng-options=\"item.sol as item.sol + ' (' + item.total_photos + ' photos)' for item in manifests[filter.rover].photos\"></select></div><div class=\"form-group\" ng-if=\"searchBy !== 'Martian Sol'\"><div class=\"input-group\"><input class=\"form-control\" ng-model=\"filter.date\" uib-datepicker-popup=\"yyyy-MM-d\" datepicker-options=\"dateOptions\" is-open=\"datepickerOpen\" ng-click=\"datepickerOpen = true\"/><span class=\"input-group-btn\"><button class=\"btn btn-default\" type=\"button\" ng-click=\"datepickerOpen = !datepickerOpen\"><i class=\"fa fa-calendar\"></i></button></span></div></div><div class=\"form-group\"><label>Camera</label><select class=\"form-control\" ng-model=\"filter.camera\" ng-options=\"camera.code as camera.label disable when !hasCamera(filter.rover, camera) for camera in enums.cameras\"></select></div><div class=\"form-group clearfix\"><button class=\"btn btn-primary pull-right\" type=\"submit\" ng-class=\"{disabled: loading}\">Search &nbsp;<i class=\"fa fa-search\"></i></button></div></form>";
 
 /***/ },
 /* 22 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"header\"><div class=\"container\"><div class=\"row\"><div class=\"col-md-12\"><h1><i class=\"fa fa-rocket\"></i> Mars Rover Image Viewer</h1></div></div></div></div>";
+	module.exports = "<div class=\"header\"><div class=\"container\"><div class=\"row\"><div class=\"col-md-12\"><h1 class=\"brand-font\"><i class=\"fa fa-rocket\"></i> Mars Rover Image Viewer</h1></div></div></div></div>";
 
 /***/ },
 /* 23 */
@@ -5382,6 +5382,9 @@
 	    };
 	    $scope.search = function() {
 	      var data;
+	      if ($scope.loading) {
+	        return;
+	      }
 	      data = _.clone(filter);
 	      if ($scope.searchBy === 'Martian Sol') {
 	        data.sol = filter.sol;
@@ -5434,11 +5437,18 @@
 	      }
 	      return encodeIds(saved);
 	    };
-	    $scope.onClick = function(points, evt) {
-	      var sol;
+	    $scope.selectSol = function(points, evt) {
+	      var entry, ref, sol;
 	      sol = parseInt(points[0].label.split('Sol ')[1]);
-	      filter.searchBy = 'Martian Sol';
+	      entry = _.find($scope.currentManifest().photos, {
+	        sol: sol
+	      });
+	      if (ref = filter.camera, indexOf.call(entry.cameras, ref) < 0) {
+	        console.log('HAD TO UPDATE CAMERA BECAUSE', filter.camera, 'not in ', entry.cameras);
+	        filter.camera = entry.cameras[0];
+	      }
 	      filter.sol = sol;
+	      $scope.searchBy = 'Martian Sol';
 	      return $scope.search();
 	    };
 	    $scope.limit = 20;
@@ -5561,6 +5571,100 @@
 
 	module.exports = [
 	  {
+	    "id": 76994,
+	    "sol": 476,
+	    "camera": {
+	      "id": 24,
+	      "name": "MAHLI",
+	      "rover_id": 5,
+	      "full_name": "Mars Hand Lens Imager"
+	    },
+	    "img_src": "http://mars.jpl.nasa.gov/msl-raw-images/msss/00476/mhli/0476MH0264000000E1_DXXX.jpg",
+	    "earth_date": "2013-12-08",
+	    "rover": {
+	      "id": 5,
+	      "name": "Curiosity",
+	      "landing_date": "2012-08-06",
+	      "launch_date": "2011-11-26",
+	      "status": "active",
+	      "max_sol": 1522,
+	      "max_date": "2016-11-16",
+	      "total_photos": 288812,
+	      "cameras": [
+	        {
+	          "name": "FHAZ",
+	          "full_name": "Front Hazard Avoidance Camera"
+	        }, {
+	          "name": "NAVCAM",
+	          "full_name": "Navigation Camera"
+	        }, {
+	          "name": "MAST",
+	          "full_name": "Mast Camera"
+	        }, {
+	          "name": "CHEMCAM",
+	          "full_name": "Chemistry and Camera Complex"
+	        }, {
+	          "name": "MAHLI",
+	          "full_name": "Mars Hand Lens Imager"
+	        }, {
+	          "name": "MARDI",
+	          "full_name": "Mars Descent Imager"
+	        }, {
+	          "name": "RHAZ",
+	          "full_name": "Rear Hazard Avoidance Camera"
+	        }
+	      ]
+	    },
+	    "saved": true,
+	    "$$hashKey": "object:40"
+	  }, {
+	    "id": 76991,
+	    "sol": 476,
+	    "camera": {
+	      "id": 24,
+	      "name": "MAHLI",
+	      "rover_id": 5,
+	      "full_name": "Mars Hand Lens Imager"
+	    },
+	    "img_src": "http://mars.jpl.nasa.gov/msl-raw-images/msss/00476/mhli/0476MH0095001000C0_DXXX.jpg",
+	    "earth_date": "2013-12-08",
+	    "rover": {
+	      "id": 5,
+	      "name": "Curiosity",
+	      "landing_date": "2012-08-06",
+	      "launch_date": "2011-11-26",
+	      "status": "active",
+	      "max_sol": 1522,
+	      "max_date": "2016-11-16",
+	      "total_photos": 288812,
+	      "cameras": [
+	        {
+	          "name": "FHAZ",
+	          "full_name": "Front Hazard Avoidance Camera"
+	        }, {
+	          "name": "NAVCAM",
+	          "full_name": "Navigation Camera"
+	        }, {
+	          "name": "MAST",
+	          "full_name": "Mast Camera"
+	        }, {
+	          "name": "CHEMCAM",
+	          "full_name": "Chemistry and Camera Complex"
+	        }, {
+	          "name": "MAHLI",
+	          "full_name": "Mars Hand Lens Imager"
+	        }, {
+	          "name": "MARDI",
+	          "full_name": "Mars Descent Imager"
+	        }, {
+	          "name": "RHAZ",
+	          "full_name": "Rear Hazard Avoidance Camera"
+	        }
+	      ]
+	    },
+	    "saved": true,
+	    "$$hashKey": "object:31"
+	  }, {
 	    "id": 67629,
 	    "sol": 868,
 	    "camera": {
