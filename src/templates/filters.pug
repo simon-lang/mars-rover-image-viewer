@@ -7,7 +7,32 @@ form(ng-submit="search()")
       ng-change="updateManifest()"
     )
   .form-group
-    label Earth Date
+    //- label Search By
+    .input-group
+      label.radio-inline
+        input(
+          type="radio"
+          name="searchBy"
+          value="Earth Date"
+          ng-model="searchBy"
+        )
+        |  Earth Date
+      label.radio-inline
+        input(
+          type="radio"
+          name="searchBy"
+          value="Martian Sol"
+          ng-model="searchBy"
+        )
+        |  Martian Sol
+  .form-group(ng-if="searchBy === 'Martian Sol'")
+    //- label Martian Sol
+    select.form-control(
+      ng-model="filter.sol"
+      ng-options="item.sol as item.sol + ' (' + item.total_photos + ' photos)' for item in manifests[filter.rover].photos"
+    )
+  .form-group(ng-if="searchBy !== 'Martian Sol'")
+    //- label Earth Date
       small(ng-if="manifests[filter.rover]")
         em  ({{ manifests[filter.rover].landing_date }} -
         em  {{ manifests[filter.rover].max_date }})

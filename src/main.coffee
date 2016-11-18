@@ -10,11 +10,12 @@ module.exports = [
   ($scope, localStorageService, photoService) ->
 
     $scope.pane = 'results'
-
+    $scope.searchBy = 'Martian Sol'
     $scope.manifests = {}
 
     $scope.filter = filter = localStorageService.get('filter') or
       date: null
+      sol: null
       rover: rovers[0].label
       camera: cameras[0].code
 
@@ -58,6 +59,9 @@ module.exports = [
       maxDate = moment(manifest.max_date).toDate()
       $scope.dateOptions = { minDate, maxDate }
 
+      if filter.sol is null and $scope.searchBy is 'Martian Sol'
+        filter.sol = 1
+
       if $scope.filter.date is null or $scope.filter.date < minDate or $scope.filter.date > maxDate
         $scope.filter.date = moment(manifest.landing_date).toDate()
 
@@ -71,12 +75,20 @@ module.exports = [
           console.warn 'ERR', err
 
     $scope.search = ->
-      localStorageService.set('filter', filter)
+      data = _.clone filter
+      if $scope.searchBy is 'Martian Sol'
+        data.sol = filter.sol
+        delete data.earth_date
+      else
+        data.earth_date = filter.date
+        delete data.sol
+
+      localStorageService.set('filter', data)
       $scope.error = null
       $scope.pane = 'results'
       $scope.photos = []
       $scope.loading = true
-      photoService.getPhotos(filter)
+      photoService.getPhotos(data)
       .then ({data}) ->
         unless data.photos
           throw new Error 'No Results'
@@ -96,6 +108,8 @@ module.exports = [
     # Any camera that exists on the new rover, will need to increment its
     #  rovers field by 8.
     $scope.hasCamera = (rover, camera) ->
+      if $scope.searchBy is 'Martian Sol' and $scope.manifests[filter.rover]
+        return camera.code in $scope.manifests[filter.rover].photos[filter.sol].cameras
       rover = _.find rovers, label: rover
       return (camera.rovers | rover.flag) is camera.rovers # bitmask
 
