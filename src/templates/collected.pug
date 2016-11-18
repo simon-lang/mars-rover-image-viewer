@@ -19,7 +19,7 @@
       div
         a.link(ng-click="findSimilar(photo)") See Similar
 
-  .share-code.no-content(ng-if="collectionCode()") Share with this code:
+  .share-code.no-content(ng-show="saved.length > 0") Share with this code:
     h2.brand-font
       a(ng-click="logCode(collectionCode())")
         | {{ collectionCode() }}
