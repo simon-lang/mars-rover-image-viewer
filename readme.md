@@ -49,6 +49,7 @@ Use `make lint` to lint the Coffeescript source.
 ## Known Issues
 
 - Date filter is one day off date on photos received.
+- Share Code not working yet
 
 
 ## Disclaimer
