@@ -1,3 +1,4 @@
+# coffeelint: disable=no_unnecessary_double_quotes
 module.exports = [
   {
     "id": 76994,

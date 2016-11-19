@@ -5513,7 +5513,6 @@
 	        sol: sol
 	      });
 	      if (ref = filter.camera, indexOf.call(entry.cameras, ref) < 0) {
-	        console.log('HAD TO UPDATE CAMERA BECAUSE', filter.camera, 'not in ', entry.cameras);
 	        filter.camera = entry.cameras[0];
 	      }
 	      filter.sol = sol;
@@ -5540,15 +5539,7 @@
 	      data = _.map(manifests[filter.rover].photos, function(photo) {
 	        return photo.total_photos;
 	      });
-	      $scope.data = [data.slice($scope.offset, $scope.offset + $scope.limit)];
-	      $scope.datasetOverride = [
-	        {
-	          yAxisID: 'y-axis-1'
-	        }, {
-	          yAxisID: 'y-axis-2'
-	        }
-	      ];
-	      return $scope.options = {};
+	      return $scope.data = [data.slice($scope.offset, $scope.offset + $scope.limit)];
 	    };
 	    return $scope.updateManifest();
 	  }

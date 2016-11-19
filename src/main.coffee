@@ -98,7 +98,7 @@ module.exports = [
       photoService.getPhotos(data)
       .then ({data}) ->
         unless data.photos
-          throw new Error 'No Results'
+          throw new Error('No Results')
         $scope.photos = data.photos
         $scope.photos?.map (photo) ->
           photo.saved = isSaved photo
@@ -129,11 +129,9 @@ module.exports = [
       return base + code
 
     $scope.selectSol = (points, evt) ->
-      # console.log points[0]
       sol = parseInt points[0].label.split('Sol ')[1] # todo: got to be a nicer way
       entry = _.find $scope.currentManifest().photos, {sol}
       unless filter.camera in entry.cameras
-        console.log 'HAD TO UPDATE CAMERA BECAUSE', filter.camera, 'not in ', entry.cameras
         filter.camera = entry.cameras[0]
       filter.sol = sol
       $scope.searchBy = 'Martian Sol'
@@ -158,9 +156,6 @@ module.exports = [
       $scope.data = [
         data.slice $scope.offset, $scope.offset + $scope.limit
       ]
-
-      $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
-      $scope.options = {}
 
     $scope.updateManifest()
 
