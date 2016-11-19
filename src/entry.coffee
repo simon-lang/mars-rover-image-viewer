@@ -18,8 +18,7 @@ directives = [
   'header'
   'tabs'
   'filters'
-  'results'
-  'collected'
+  'photo'
 ]
 
 _.each directives, (directive) ->
@@ -27,5 +26,6 @@ _.each directives, (directive) ->
     template: require './templates/' + directive + '.pug'
 
 app.directive 'loadImage', require './directives/loadImageDirective.coffee'
+app.directive 'selectOnClick', require './directives/selectOnClickDirective.coffee'
 
 app.controller 'MainController', require './main.coffee'

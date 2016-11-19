@@ -3,19 +3,13 @@ cameras = require './enums/cameras.coffee'
 
 favourites = require './favourites.coffee'
 
-encodeIds = (photos) ->
-  ids = photos.map ({id}) -> id
-  btoa ids.join ','
-
-decodeIds = (str) ->
-  atob str.split ','
-
 module.exports = [
   '$scope'
   '$state'
+  '$window'
   'localStorageService'
   'photoService'
-  ($scope, $state, localStorageService, photoService) ->
+  ($scope, $state, $window, localStorageService, photoService) ->
 
     $scope.$state = $state
     $scope.searchBy = 'Earth Date'
@@ -129,13 +123,10 @@ module.exports = [
     $scope.currentManifest = ->
       return manifests[filter.rover]
 
-    $scope.logCode = (s) ->
-      console.log decodeIds s
-
-    $scope.collectionCode = ->
-      if !saved.length
-        return null
-      return encodeIds saved
+    $scope.shareLink = ->
+      base = $window.location.origin + $window.location.pathname + '#/share/'
+      code = photoService.encode $scope.saved
+      return base + code
 
     $scope.selectSol = (points, evt) ->
       # console.log points[0]
@@ -169,22 +160,7 @@ module.exports = [
       ]
 
       $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
-      $scope.options =
-        scales:
-          yAxes: [
-            {
-              id: 'y-axis-1',
-              type: 'linear',
-              display: true,
-              position: 'left'
-            },
-            {
-              id: 'y-axis-2',
-              type: 'linear',
-              display: true,
-              position: 'right'
-            }
-          ]
+      $scope.options = {}
 
     $scope.updateManifest()
 

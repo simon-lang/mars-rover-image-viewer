@@ -1,0 +1,12 @@
+img.img-responsive(ng-src="{{photo.img_src}}")
+.well
+  h4
+    a.btn.btn-danger.pull-right(
+      ng-if="photo.id"
+      ng-click="save(photo)"
+    ) Remove From Collection
+    | {{ photo.rover.name }}
+  div {{ photo.earth_date }}
+  div {{ photo.camera.name }} ({{ photo.camera.full_name }})
+  div
+    a.link(ng-click="findSimilar(photo)") See Similar

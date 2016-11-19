@@ -64,23 +64,25 @@
 
 	app.config(__webpack_require__(15));
 
-	app.service('localStorageService', __webpack_require__(17));
+	app.service('localStorageService', __webpack_require__(20));
 
-	app.service('photoService', __webpack_require__(18));
+	app.service('photoService', __webpack_require__(21));
 
-	directives = ['header', 'tabs', 'filters', 'results', 'collected'];
+	directives = ['header', 'tabs', 'filters', 'photo'];
 
 	_.each(directives, function(directive) {
 	  return app.directive(directive, function() {
 	    return {
-	      template: __webpack_require__(19)("./" + directive + '.pug')
+	      template: __webpack_require__(22)("./" + directive + '.pug')
 	    };
 	  });
 	});
 
-	app.directive('loadImage', __webpack_require__(25));
+	app.directive('loadImage', __webpack_require__(27));
 
-	app.controller('MainController', __webpack_require__(26));
+	app.directive('selectOnClick', __webpack_require__(28));
+
+	app.controller('MainController', __webpack_require__(29));
 
 
 /***/ },
@@ -5110,7 +5112,7 @@
 
 
 	// module
-	exports.push([module.id, ".margin {\n  margin: 1em;\n}\n.link {\n  cursor: pointer;\n}\n.padded {\n  padding: 1em;\n}\n.text-center {\n  text-align: center;\n}\n.space-before {\n  margin-top: 1em;\n}\n.brand-font {\n  font-family: 'Quantico', sans-serif;\n}\nbody {\n  font-family: 'Quantico', sans-serif;\n}\n.loading,\n.no-content {\n  text-align: center;\n  padding: 4em 0;\n}\n.results,\n.collected-images,\n.manifest {\n  border: 1px solid #464545;\n  border-top: none;\n}\n.photo img {\n  width: 100%;\n}\n.header {\n  background: #111;\n  margin-bottom: 1em;\n  padding-bottom: 1em;\n}\n.header i {\n  float: right;\n}\n.section-heading {\n  margin-top: 0;\n  padding-top: 0;\n}\n.share-code {\n  padding: 1em;\n  max-width: 100%;\n  overflow: hidden;\n  text-align: center;\n}\n", ""]);
+	exports.push([module.id, ".margin {\n  margin: 1em;\n}\n.link {\n  cursor: pointer;\n}\n.padded {\n  padding: 1em;\n}\n.text-center {\n  text-align: center;\n}\n.space-before {\n  margin-top: 1em;\n}\n.brand-font {\n  font-family: 'Quantico', sans-serif;\n}\nbody {\n  font-family: 'Quantico', sans-serif;\n}\n.loading,\n.no-content {\n  text-align: center;\n  padding: 4em 0;\n}\n.pane {\n  border: 1px solid #464545;\n  border-top: none;\n}\n.photo img {\n  width: 100%;\n}\n.header {\n  background: #111;\n  margin-bottom: 1em;\n  padding-bottom: 1em;\n}\n.header i {\n  float: right;\n}\n.section-heading {\n  margin-top: 0;\n  padding-top: 0;\n}\n.share-code {\n  padding: 1em;\n  max-width: 100%;\n  overflow: hidden;\n  text-align: center;\n}\n.share-code-input {\n  background: rgba(0, 0, 0, 0.1);\n  color: #00bc8c;\n}\n", ""]);
 
 	// exports
 
@@ -5127,17 +5129,27 @@
 	    $stateProvider.state({
 	      name: 'results',
 	      url: '/results',
-	      template: '<results></results>'
+	      template: __webpack_require__(16)
 	    });
 	    $stateProvider.state({
 	      name: 'collected',
 	      url: '/collected',
-	      template: '<collected></collected>'
+	      template: __webpack_require__(17)
+	    });
+	    $stateProvider.state({
+	      name: 'import',
+	      url: '/share/{encoded}',
+	      template: __webpack_require__(18),
+	      controller: [
+	        '$scope', '$stateParams', 'photoService', function($scope, $stateParams, photoService) {
+	          return $scope.shared = photoService.decode($stateParams.encoded);
+	        }
+	      ]
 	    });
 	    return $stateProvider.state({
 	      name: 'manifest',
 	      url: '/manifest',
-	      template: __webpack_require__(16)
+	      template: __webpack_require__(19)
 	    });
 	  }
 	];
@@ -5147,10 +5159,28 @@
 /* 16 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"manifest padded\"><h3 class=\"brand-font section-heading\">Mission Manifest for {{ filter.rover }}<small ng-if=\"manifests[filter.rover]\"><em> ({{ manifests[filter.rover].landing_date }} -</em><em> {{ manifests[filter.rover].max_date }})</em></small></h3><canvas class=\"chart chart-bar\" id=\"bar\" chart-data=\"data\" chart-labels=\"labels\" chart-series=\"series\" chart-options=\"options\" chart-dataset-override=\"datasetOverride\" chart-click=\"selectSol\"></canvas><div class=\"clearfix\"><a class=\"link pull-left btn btn-link\" ng-click=\"decreaseOffset()\"><i class=\"fa fa-caret-left\"></i> Previous {{limit}} days</a><a class=\"link pull-right btn btn-link\" ng-click=\"increaseOffset()\"> Next {{limit}} days &nbsp;<i class=\"fa fa-caret-right\"></i></a></div></div>";
+	module.exports = "<div class=\"results pane padded\"><div class=\"no-content\" ng-if=\"photos.length === 0 &amp;&amp; !error &amp;&amp; !loading\">Search to see some results</div><div class=\"no-content\" ng-if=\"error\">{{ error }}</div><div class=\"loading\" ng-if=\"loading\">Loading...</div><div class=\"photo\" ng-repeat=\"photo in photos | limitTo:20\"><img class=\"img-responsive\" ng-src=\"{{photo.img_src}}\"/><div class=\"well\"><h4><a class=\"btn pull-right\" ng-click=\"save(photo)\" ng-class=\"{ 'btn-success': photo.saved, 'btn-default': '!photo.saved' }\"><i class=\"fa fa-check\" ng-if=\"photo.saved\"></i><i class=\"fa fa-save\" ng-if=\"!photo.saved\"></i> {{ photo.saved ? 'Saved' : 'Save' }}</a>{{ photo.rover.name }}</h4><div>{{ photo.earth_date }}</div><div>{{ photo.camera.name }} ({{ photo.camera.full_name }})</div></div><pre class=\"well\" ng-if=\"photo.showRaw\">{{ photo | json }}</pre></div></div>";
 
 /***/ },
 /* 17 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"collected-images pane padded\"><div class=\"no-content\" ng-if=\"saved.length === 0\"><p>No saved photos</p><p><a class=\"link\" ng-click=\"import()\">Want to see some pre-selected ones?</a></p></div><div class=\"share-code no-content\" ng-show=\"saved.length &gt; 0\"><p>Share your collection with this url:</p><input class=\"form-control share-code-input\" select-on-click=\"select-on-click\" value=\"{{ shareLink() }}\"/></div><photo class=\"photo\" ng-repeat=\"photo in saved\"></photo></div>";
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"shared-images pane padded\"><photo class=\"photo\" ng-repeat=\"photo in shared\"></photo></div>";
+
+/***/ },
+/* 19 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"manifest pane padded\"><h3 class=\"brand-font section-heading\">Mission Manifest for {{ filter.rover }}<small ng-if=\"manifests[filter.rover]\"><em> ({{ manifests[filter.rover].landing_date }} -</em><em> {{ manifests[filter.rover].max_date }})</em></small></h3><canvas class=\"chart chart-bar\" id=\"bar\" chart-data=\"data\" chart-labels=\"labels\" chart-series=\"series\" chart-options=\"options\" chart-dataset-override=\"datasetOverride\" chart-click=\"selectSol\"></canvas><div class=\"clearfix\"><a class=\"link pull-left btn btn-link\" ng-click=\"decreaseOffset()\"><i class=\"fa fa-caret-left\"></i> Previous {{limit}} days</a><a class=\"link pull-right btn btn-link\" ng-click=\"increaseOffset()\"> Next {{limit}} days &nbsp;<i class=\"fa fa-caret-right\"></i></a></div></div>";
+
+/***/ },
+/* 20 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -5183,7 +5213,7 @@
 
 
 /***/ },
-/* 18 */
+/* 21 */
 /***/ function(module, exports) {
 
 	var API_KEY, API_URL;
@@ -5197,7 +5227,7 @@
 	}
 
 	module.exports = [
-	  '$http', function($http) {
+	  '$http', '$window', function($http, $window) {
 	    return {
 	      getPhotos: function(filter) {
 	        var url;
@@ -5222,6 +5252,24 @@
 	          data = arg.data;
 	          return data.photo_manifest;
 	        });
+	      },
+	      encode: function(photos) {
+	        photos = photos.map(function(photo) {
+	          return {
+	            img_src: photo.img_src,
+	            earth_date: photo.earth_date,
+	            rover: {
+	              name: photo.rover.name
+	            },
+	            camera: {
+	              name: photo.camera.name
+	            }
+	          };
+	        });
+	        return $window.btoa(JSON.stringify(photos));
+	      },
+	      decode: function(str) {
+	        return JSON.parse($window.atob(str));
 	      }
 	    };
 	  }
@@ -5229,16 +5277,18 @@
 
 
 /***/ },
-/* 19 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./collected.pug": 20,
-		"./filters.pug": 21,
-		"./header.pug": 22,
-		"./manifest.pug": 16,
-		"./results.pug": 23,
-		"./tabs.pug": 24
+		"./collected.pug": 17,
+		"./filters.pug": 23,
+		"./header.pug": 24,
+		"./manifest.pug": 19,
+		"./photo.pug": 25,
+		"./results.pug": 16,
+		"./shared.pug": 18,
+		"./tabs.pug": 26
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -5251,41 +5301,35 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 19;
+	webpackContext.id = 22;
 
-
-/***/ },
-/* 20 */
-/***/ function(module, exports) {
-
-	module.exports = "<div class=\"collected-images padded\"><div class=\"no-content\" ng-if=\"saved.length === 0\"><p>No saved photos</p><p><a class=\"link\" ng-click=\"import()\">Want to see some pre-selected ones?</a></p></div><div class=\"photo\" ng-repeat=\"photo in saved\"><img class=\"img-responsive\" ng-src=\"{{photo.img_src}}\"/><div class=\"well\"><h4><a class=\"btn btn-danger pull-right\" ng-click=\"save(photo)\">Remove From Collection</a>{{ photo.rover.name }}</h4><div>{{ photo.earth_date }}</div><div>{{ photo.camera.name }} ({{ photo.camera.full_name }})</div><div><a class=\"link\" ng-click=\"findSimilar(photo)\">See Similar</a></div></div></div><div class=\"share-code no-content\" ng-show=\"saved.length &gt; 0\">Share with this code:<h2 class=\"brand-font\"><a ng-click=\"logCode(collectionCode())\">{{ collectionCode() }}</a></h2></div></div>";
-
-/***/ },
-/* 21 */
-/***/ function(module, exports) {
-
-	module.exports = "<form ng-submit=\"search()\"><div class=\"form-group\"><label>Rover</label><select class=\"form-control\" ng-model=\"filter.rover\" ng-options=\"rover.label as rover.label for rover in enums.rovers\" ng-change=\"updateManifest()\"></select></div><div class=\"form-group\"><div class=\"input-group\"><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Earth Date\" ng-model=\"searchBy\"/> Earth Date</label><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Martian Sol\" ng-model=\"searchBy\"/> Martian Sol</label></div></div><div class=\"form-group\" ng-if=\"searchBy === 'Martian Sol'\"><select class=\"form-control\" ng-model=\"filter.sol\" ng-options=\"item.sol as item.sol + ' (' + item.total_photos + ' photos)' for item in manifests[filter.rover].photos\"></select></div><div class=\"form-group\" ng-if=\"searchBy !== 'Martian Sol'\"><div class=\"input-group\"><input class=\"form-control\" ng-model=\"filter.date\" uib-datepicker-popup=\"yyyy-MM-d\" datepicker-options=\"dateOptions\" is-open=\"datepickerOpen\" ng-click=\"datepickerOpen = true\"/><span class=\"input-group-btn\"><button class=\"btn btn-default\" type=\"button\" ng-click=\"datepickerOpen = !datepickerOpen\"><i class=\"fa fa-calendar\"></i></button></span></div></div><div class=\"form-group\"><label>Camera</label><select class=\"form-control\" ng-model=\"filter.camera\" ng-options=\"camera.code as camera.label disable when !hasCamera(filter.rover, camera) for camera in enums.cameras\"></select></div><div class=\"form-group clearfix\"><button class=\"btn btn-primary pull-right\" type=\"submit\" ng-class=\"{disabled: loading}\">Search &nbsp;<i class=\"fa fa-search\"></i></button></div></form>";
-
-/***/ },
-/* 22 */
-/***/ function(module, exports) {
-
-	module.exports = "<div class=\"header\"><div class=\"container\"><div class=\"row\"><div class=\"col-md-12\"><h1 class=\"brand-font\"><i class=\"fa fa-rocket\"></i> Mars Rover Image Viewer</h1></div></div></div></div>";
 
 /***/ },
 /* 23 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"results padded\"><div class=\"no-content\" ng-if=\"photos.length === 0 &amp;&amp; !error &amp;&amp; !loading\">Search to see some results</div><div class=\"no-content\" ng-if=\"error\">{{ error }}</div><div class=\"loading\" ng-if=\"loading\">Loading...</div><div class=\"photo\" ng-repeat=\"photo in photos | limitTo:20\"><img class=\"img-responsive\" ng-src=\"{{photo.img_src}}\"/><div class=\"well\"><h4><a class=\"btn pull-right\" ng-click=\"save(photo)\" ng-class=\"{ 'btn-success': photo.saved, 'btn-default': '!photo.saved' }\"><i class=\"fa fa-check\" ng-if=\"photo.saved\"></i><i class=\"fa fa-save\" ng-if=\"!photo.saved\"></i> {{ photo.saved ? 'Saved' : 'Save' }}</a>{{ photo.rover.name }}</h4><div>{{ photo.earth_date }}</div><div>{{ photo.camera.name }} ({{ photo.camera.full_name }})</div></div><pre class=\"well\" ng-if=\"photo.showRaw\">{{ photo | json }}</pre></div></div>";
+	module.exports = "<form ng-submit=\"search()\"><div class=\"form-group\"><label>Rover</label><select class=\"form-control\" ng-model=\"filter.rover\" ng-options=\"rover.label as rover.label for rover in enums.rovers\" ng-change=\"updateManifest()\"></select></div><div class=\"form-group\"><div class=\"input-group\"><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Earth Date\" ng-model=\"searchBy\"/> Earth Date</label><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Martian Sol\" ng-model=\"searchBy\"/> Martian Sol</label></div></div><div class=\"form-group\" ng-if=\"searchBy === 'Martian Sol'\"><select class=\"form-control\" ng-model=\"filter.sol\" ng-options=\"item.sol as item.sol + ' (' + item.total_photos + ' photos)' for item in manifests[filter.rover].photos\"></select></div><div class=\"form-group\" ng-if=\"searchBy !== 'Martian Sol'\"><div class=\"input-group\"><input class=\"form-control\" ng-model=\"filter.date\" uib-datepicker-popup=\"yyyy-MM-d\" datepicker-options=\"dateOptions\" is-open=\"datepickerOpen\" ng-click=\"datepickerOpen = true\"/><span class=\"input-group-btn\"><button class=\"btn btn-default\" type=\"button\" ng-click=\"datepickerOpen = !datepickerOpen\"><i class=\"fa fa-calendar\"></i></button></span></div></div><div class=\"form-group\"><label>Camera</label><select class=\"form-control\" ng-model=\"filter.camera\" ng-options=\"camera.code as camera.label disable when !hasCamera(filter.rover, camera) for camera in enums.cameras\"></select></div><div class=\"form-group clearfix\"><button class=\"btn btn-primary pull-right\" type=\"submit\" ng-class=\"{disabled: loading}\">Search &nbsp;<i class=\"fa fa-search\"></i></button></div></form>";
 
 /***/ },
 /* 24 */
 /***/ function(module, exports) {
 
-	module.exports = "<ul class=\"nav nav-tabs\"><li class=\"link\" ng-class=\"{ active: $state.includes('results') }\"><a ui-sref=\"results\">Results</a></li><li class=\"link\" ng-class=\"{ active: $state.includes('manifest'), disabled: !currentManifest() }\"><a ui-sref=\"manifest\">Manifest</a></li><li class=\"link\" ng-class=\"{ active: $state.includes('collected') }\"><a ui-sref=\"collected\">Collected Images</a></li></ul>";
+	module.exports = "<div class=\"header\"><div class=\"container\"><div class=\"row\"><div class=\"col-md-12\"><h1 class=\"brand-font\"><i class=\"fa fa-rocket\"></i> Mars Rover Image Viewer</h1></div></div></div></div>";
 
 /***/ },
 /* 25 */
+/***/ function(module, exports) {
+
+	module.exports = "<img class=\"img-responsive\" ng-src=\"{{photo.img_src}}\"/><div class=\"well\"><h4><a class=\"btn btn-danger pull-right\" ng-if=\"photo.id\" ng-click=\"save(photo)\">Remove From Collection</a>{{ photo.rover.name }}</h4><div>{{ photo.earth_date }}</div><div>{{ photo.camera.name }} ({{ photo.camera.full_name }})</div><div><a class=\"link\" ng-click=\"findSimilar(photo)\">See Similar</a></div></div>";
+
+/***/ },
+/* 26 */
+/***/ function(module, exports) {
+
+	module.exports = "<ul class=\"nav nav-tabs\"><li class=\"link\" ng-class=\"{ active: $state.includes('results') }\"><a ui-sref=\"results\">Results</a></li><li class=\"link\" ng-class=\"{ active: $state.includes('manifest'), disabled: !currentManifest() }\"><a ui-sref=\"manifest\">Manifest</a></li><li class=\"link\" ng-class=\"{ active: $state.includes('collected') }\"><a ui-sref=\"collected\">Collected Images</a></li></ul>";
+
+/***/ },
+/* 27 */
 /***/ function(module, exports) {
 
 	module.exports = function() {
@@ -5305,34 +5349,35 @@
 
 
 /***/ },
-/* 26 */
+/* 28 */
+/***/ function(module, exports) {
+
+	module.exports = function() {
+	  return {
+	    link: function(scope, element, attrs) {
+	      return element.on('click', function() {
+	        return element.select();
+	      });
+	    }
+	  };
+	};
+
+
+/***/ },
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var cameras, decodeIds, encodeIds, favourites, rovers,
+	var cameras, favourites, rovers,
 	  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-	rovers = __webpack_require__(27);
+	rovers = __webpack_require__(30);
 
-	cameras = __webpack_require__(28);
+	cameras = __webpack_require__(31);
 
-	favourites = __webpack_require__(29);
-
-	encodeIds = function(photos) {
-	  var ids;
-	  ids = photos.map(function(arg) {
-	    var id;
-	    id = arg.id;
-	    return id;
-	  });
-	  return btoa(ids.join(','));
-	};
-
-	decodeIds = function(str) {
-	  return atob(str.split(','));
-	};
+	favourites = __webpack_require__(32);
 
 	module.exports = [
-	  '$scope', '$state', 'localStorageService', 'photoService', function($scope, $state, localStorageService, photoService) {
+	  '$scope', '$state', '$window', 'localStorageService', 'photoService', function($scope, $state, $window, localStorageService, photoService) {
 	    var _updateManifest, drawChart, filter, isSaved, manifests, saved;
 	    $scope.$state = $state;
 	    $scope.searchBy = 'Earth Date';
@@ -5455,14 +5500,11 @@
 	    $scope.currentManifest = function() {
 	      return manifests[filter.rover];
 	    };
-	    $scope.logCode = function(s) {
-	      return console.log(decodeIds(s));
-	    };
-	    $scope.collectionCode = function() {
-	      if (!saved.length) {
-	        return null;
-	      }
-	      return encodeIds(saved);
+	    $scope.shareLink = function() {
+	      var base, code;
+	      base = $window.location.origin + $window.location.pathname + '#/share/';
+	      code = photoService.encode($scope.saved);
+	      return base + code;
 	    };
 	    $scope.selectSol = function(points, evt) {
 	      var entry, ref, sol;
@@ -5506,23 +5548,7 @@
 	          yAxisID: 'y-axis-2'
 	        }
 	      ];
-	      return $scope.options = {
-	        scales: {
-	          yAxes: [
-	            {
-	              id: 'y-axis-1',
-	              type: 'linear',
-	              display: true,
-	              position: 'left'
-	            }, {
-	              id: 'y-axis-2',
-	              type: 'linear',
-	              display: true,
-	              position: 'right'
-	            }
-	          ]
-	        }
-	      };
+	      return $scope.options = {};
 	    };
 	    return $scope.updateManifest();
 	  }
@@ -5530,7 +5556,7 @@
 
 
 /***/ },
-/* 27 */
+/* 30 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -5548,7 +5574,7 @@
 
 
 /***/ },
-/* 28 */
+/* 31 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -5593,7 +5619,7 @@
 
 
 /***/ },
-/* 29 */
+/* 32 */
 /***/ function(module, exports) {
 
 	module.exports = [

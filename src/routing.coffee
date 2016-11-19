@@ -11,12 +11,24 @@ module.exports = [
     $stateProvider.state
       name: 'results',
       url: '/results',
-      template: '<results></results>'
+      template: require './templates/results.pug'
 
     $stateProvider.state
       name: 'collected',
       url: '/collected',
-      template: '<collected></collected>'
+      template: require './templates/collected.pug'
+
+    $stateProvider.state
+      name: 'import',
+      url: '/share/{encoded}',
+      template: require './templates/shared.pug'
+      controller: [
+        '$scope'
+        '$stateParams'
+        'photoService'
+         ($scope, $stateParams, photoService) ->
+            $scope.shared = photoService.decode $stateParams.encoded
+       ]
 
     $stateProvider.state
       name: 'manifest',

@@ -1,4 +1,4 @@
-.manifest.padded
+.manifest.pane.padded
 
   h3.brand-font.section-heading Mission Manifest for {{ filter.rover }}
     small(ng-if="manifests[filter.rover]")
@@ -24,12 +24,3 @@
     a.link.pull-right.btn.btn-link(ng-click="increaseOffset()")
       |  Next {{limit}} days &nbsp;
       i.fa.fa-caret-right
-
-  //- pre {{selectedManifestEntry | json}}
-
-  //- div(ng-repeat="photo in manifests[filter.rover].photos")
-    span Sol {{ photo.sol }}
-      small  - {{ photo.total_photos }} Photos
-    span  (
-      a.link(ng-repeat="camera in photo.cameras" ng-click="filter.camera = camera") {{ camera }},&nbsp;
-    | )
