@@ -4,7 +4,9 @@ img.img-responsive(ng-src="{{photo.img_src}}")
     a.btn.btn-danger.pull-right(
       ng-if="photo.id"
       ng-click="save(photo)"
-    ) Remove From Collection
+    )
+      i.fa.fa-trash
+      span(ng-if="!isMobile")  Remove From Collection
     | {{ photo.rover.name }}
   div {{ photo.earth_date }}
   div {{ photo.camera.name }} ({{ photo.camera.full_name }})

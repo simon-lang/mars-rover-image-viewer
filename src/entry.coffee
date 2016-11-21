@@ -29,3 +29,15 @@ app.directive 'loadImage', require './directives/loadImageDirective.coffee'
 app.directive 'selectOnClick', require './directives/selectOnClickDirective.coffee'
 
 app.controller 'MainController', require './main.coffee'
+
+app.run [
+  '$rootScope'
+  '$window'
+  ($rootScope, $window) ->
+    resize = _.debounce ->
+      $rootScope.isMobile = $window.matchMedia("(max-width: 767px)").matches
+      $rootScope.$applyAsync()
+    , 100
+    angular.element($window).resize resize
+    resize()
+]
