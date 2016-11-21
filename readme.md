@@ -25,7 +25,7 @@ Use `make lint` to lint the Coffeescript source.
 ## Technology Used
 
 - Coffeescript and Node for all scripting
-- LESS for CSS pre-processing
+- Stylus for CSS pre-processing
 - Pug for HTML templating (previously called Jade)
 - NPM for dependency management
 - Webpack for building/bundling

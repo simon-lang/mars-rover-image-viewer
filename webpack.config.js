@@ -18,8 +18,8 @@ module.exports = {
         loader: 'pug-html-loader'
       },
       {
-        test: /\.less$/,
-        loader: 'style!css!less'
+        test: /\.styl$/,
+        loader: 'style!css!stylus-loader'
       },
       {
         test: /\.css$/,

@@ -1,7 +1,7 @@
 require 'angular-ui-router'
 
-require './less/bootstrap.min.css'
-require './less/main.less'
+require './styles/bootstrap.min.css'
+require './styles/main.styl'
 
 app = angular.module 'mars-rover-image-viewer', [
   'ui.bootstrap'
