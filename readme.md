@@ -1,6 +1,6 @@
 # Mars Rover Image Viewer
 
-[https://captainclam.github.io/mars-rover-image-viewer/](https://captainclam.github.io/mars-rover-image-viewer/)
+[https://simon-lang.github.io/mars-rover-image-viewer/](https://simon-lang.github.io/mars-rover-image-viewer/)
 
 ## Requirements
 
