@@ -89,15 +89,15 @@
 	    top = 0;
 	    resize = _.debounce(function() {
 	      var el;
-	      el = $('.filters-form');
+	      el = $('.wrapper');
 	      top = el.offset().top;
 	      $rootScope.isMobile = $window.matchMedia("(max-width: 767px)").matches;
 	      return $rootScope.$applyAsync();
 	    }, 100);
 	    scroll = function() {
 	      var el;
-	      el = $('.filters-form');
-	      return el.toggleClass('stuck', top < window.pageYOffset);
+	      el = $('.wrapper');
+	      return el.toggleClass('stuck', top <= window.pageYOffset);
 	    };
 	    angular.element($window).resize(resize);
 	    angular.element($window).scroll(scroll);
@@ -5133,7 +5133,7 @@
 
 
 	// module
-	exports.push([module.id, ".margin {\n  margin: 1em;\n}\n.link {\n  cursor: pointer;\n}\n.padded {\n  padding: 1em;\n}\n.text-center {\n  text-align: center;\n}\n.space-before {\n  margin-top: 1em;\n}\n.brand-font {\n  font-family: 'Quantico', sans-serif;\n}\nbody {\n  font-family: 'Quantico', sans-serif;\n}\n.loading,\n.no-content {\n  text-align: center;\n  padding: 4em 0;\n}\n.pane {\n  border: 1px solid #464545;\n  border-top: none;\n}\n.photo img {\n  width: 100%;\n}\n.header {\n  background: #111;\n  margin-bottom: 1em;\n  padding-bottom: 1em;\n}\n.section-heading {\n  margin-top: 0;\n  padding-top: 0;\n}\n.share-code {\n  padding: 1em;\n  max-width: 100%;\n  overflow: hidden;\n  text-align: center;\n}\n.share-code-input {\n  background: rgba(0,0,0,0.1);\n  color: #00bc8c;\n}\n.wrapper {\n  position: relative;\n}\n.sidebar {\n  position: absolute;\n  top: 0;\n  width: 320px;\n}\n", ""]);
+	exports.push([module.id, ".margin {\n  margin: 1em;\n}\n.link {\n  cursor: pointer;\n}\n.padded {\n  padding: 1em;\n}\n.text-center {\n  text-align: center;\n}\n.space-before {\n  margin-top: 1em;\n}\n.brand-font {\n  font-family: 'Quantico', sans-serif;\n}\nbody {\n  font-family: 'Quantico', sans-serif;\n}\n.loading,\n.no-content {\n  text-align: center;\n  padding: 4em 0;\n}\n.pane {\n  border: 1px solid #464545;\n  border-top: none;\n}\n.photo img {\n  width: 100%;\n}\n.header {\n  background: #111;\n  padding-bottom: 1em;\n}\n.section-heading {\n  margin-top: 0;\n  padding-top: 0;\n}\n.share-code {\n  padding: 1em;\n  max-width: 100%;\n  overflow: hidden;\n  text-align: center;\n}\n.share-code-input {\n  background: rgba(0,0,0,0.1);\n  color: #00bc8c;\n}\n.wrapper {\n  position: relative;\n  padding-top: 20px;\n}\n.wrapper.stuck .sidebar {\n  position: fixed;\n}\n.sidebar {\n  position: absolute;\n  top: 20px;\n  width: 320px;\n}\n.main {\n  padding-left: 340px;\n}\n", ""]);
 
 	// exports
 
@@ -5329,7 +5329,7 @@
 /* 22 */
 /***/ function(module, exports) {
 
-	module.exports = "<form class=\"filters-form\" ng-submit=\"search()\"><div class=\"form-group\"><label>Rover</label><select class=\"form-control\" ng-model=\"filter.rover\" ng-options=\"rover.label as rover.label for rover in enums.rovers\" ng-change=\"updateManifest()\"></select></div><div class=\"form-group\"><div class=\"input-group\"><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Earth Date\" ng-model=\"searchBy\"/> Earth Date</label><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Martian Sol\" ng-model=\"searchBy\"/> Martian Sol</label></div></div><div class=\"form-group\" ng-if=\"searchBy === 'Martian Sol'\"><select class=\"form-control\" ng-model=\"filter.sol\" ng-options=\"item.sol as item.sol + ' (' + item.total_photos + ' photos)' for item in manifests[filter.rover].photos\"></select></div><div class=\"form-group\" ng-if=\"searchBy !== 'Martian Sol'\"><div class=\"input-group\"><input class=\"form-control\" ng-model=\"filter.date\" uib-datepicker-popup=\"yyyy-MM-d\" datepicker-options=\"dateOptions\" is-open=\"datepickerOpen\" ng-click=\"datepickerOpen = true\"/><span class=\"input-group-btn\"><button class=\"btn btn-default\" type=\"button\" ng-click=\"datepickerOpen = !datepickerOpen\"><i class=\"fa fa-calendar\"></i></button></span></div></div><div class=\"form-group\"><label>Camera</label><select class=\"form-control\" ng-model=\"filter.camera\" ng-options=\"camera.code as camera.label disable when !hasCamera(filter.rover, camera) for camera in enums.cameras\"></select></div><div class=\"form-group clearfix\"><button class=\"btn btn-primary pull-right\" type=\"submit\" ng-class=\"{disabled: loading}\">Search &nbsp;<i class=\"fa fa-search\"></i></button></div></form>";
+	module.exports = "<form class=\"filters-form\" ng-submit=\"search()\"><div class=\"form-group\"><label>Rover</label><select class=\"form-control\" ng-model=\"filter.rover\" ng-options=\"rover.label as rover.label for rover in enums.rovers\" ng-change=\"updateManifest()\"></select></div><div class=\"form-group\"><div class=\"input-group\"><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Earth Date\" ng-model=\"searchBy\"/> Earth Date</label><label class=\"radio-inline\"><input type=\"radio\" name=\"searchBy\" value=\"Martian Sol\" ng-model=\"searchBy\"/> Martian Sol</label></div></div><div class=\"form-group\" ng-if=\"searchBy === 'Martian Sol'\"><select class=\"form-control\" ng-model=\"filter.sol\" ng-options=\"item.sol as item.sol + ' (' + item.total_photos + ' photos)' for item in manifests[filter.rover].photos\"></select></div><div class=\"form-group\" ng-if=\"searchBy !== 'Martian Sol'\"><div class=\"input-group\"><input class=\"form-control\" ng-model=\"filter.date\" uib-datepicker-popup=\"yyyy-MM-d\" datepicker-options=\"dateOptions\" is-open=\"datepickerOpen\" ng-click=\"datepickerOpen = true\"/><span class=\"input-group-btn\"><button class=\"btn btn-default\" type=\"button\" ng-click=\"datepickerOpen = !datepickerOpen\"><i class=\"fa fa-calendar\"></i></button></span></div></div><div class=\"form-group\"><label>Camera</label><select class=\"form-control\" ng-model=\"filter.camera\" ng-options=\"camera.code as camera.label disable when !hasCamera(filter.rover, camera) for camera in enums.cameras\"></select></div><div class=\"form-group clearfix\"><button class=\"btn btn-success pull-right\" type=\"submit\" ng-class=\"{disabled: loading}\">Search &nbsp;<i class=\"fa fa-search\"></i></button></div></form>";
 
 /***/ },
 /* 23 */
