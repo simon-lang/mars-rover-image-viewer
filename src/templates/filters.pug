@@ -48,6 +48,6 @@ form(ng-submit="search()").filters-form
       ng-options="camera.code as camera.label disable when !hasCamera(filter.rover, camera) for camera in enums.cameras"
     )
   .form-group.clearfix
-    button.btn.btn-primary.pull-right(type="submit" ng-class="{disabled: loading}")
+    button.btn.btn-success.pull-right(type="submit" ng-class="{disabled: loading}")
       | Search &nbsp;
       i.fa.fa-search
