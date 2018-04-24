@@ -16,7 +16,6 @@ body
 
 .header
   background: #111
-  margin-bottom: 1em
   padding-bottom: 1em
 
 .section-heading
@@ -33,5 +32,18 @@ body
   background: rgba(0,0,0,0.1)
   color: #00bc8c
 
-.filters-form.stuck
-  // position fixed
+
+.wrapper
+  position relative
+  padding-top 20px
+
+  &.stuck .sidebar
+    position fixed
+
+.sidebar
+  position absolute
+  top 20px
+  width 320px
+
+.main
+  padding-left: 340px

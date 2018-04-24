@@ -36,14 +36,14 @@ app.run [
   ($rootScope, $window) ->
     top = 0
     resize = _.debounce ->
-      el = $('.filters-form')
+      el = $('.wrapper')
       top = el.offset().top
       $rootScope.isMobile = $window.matchMedia("(max-width: 767px)").matches
       $rootScope.$applyAsync()
     , 100
     scroll = ->
-       el = $('.filters-form')
-       el.toggleClass('stuck', top < window.pageYOffset)
+       el = $('.wrapper')
+       el.toggleClass('stuck', top <= window.pageYOffset)
     angular.element($window).resize resize
     angular.element($window).scroll scroll
     resize()

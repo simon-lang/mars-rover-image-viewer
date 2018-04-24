@@ -21,11 +21,11 @@ html(lang="en" ng-app="mars-rover-image-viewer")
   body(ng-controller="MainController")
     header
     .container
-      .row
-        .col-md-4
+      .wrapper
+        .sidebar
           filters
 
-        .col-md-8
+        .main
           tabs
           ui-view
       .row
