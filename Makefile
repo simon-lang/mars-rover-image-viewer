@@ -10,7 +10,7 @@ test: deps
 lint: deps
 	node_modules/.bin/coffeelint src/
 
-dev: deps
+dev: build
 	npm run dev
 
 deploy: build
