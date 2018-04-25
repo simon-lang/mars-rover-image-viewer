@@ -6,7 +6,7 @@ img.img-responsive(ng-src="{{photo.img_src}}")
       ng-click="save(photo)"
     )
       i.fa.fa-trash
-      span(ng-if="!isMobile")  Remove From Collection
+      span(ng-if="!isMobile && layout !== 'grid'")  Remove From Collection
     | {{ photo.rover.name }}
   div {{ photo.earth_date }}
   div {{ photo.camera.name }} ({{ photo.camera.full_name }})

@@ -5,3 +5,9 @@ ul.nav.nav-tabs
     a(ui-sref="manifest") Manifest
   li.link(ng-class="{ active: $state.includes('collected') }")
     a(ui-sref="collected") Collected Images
+  li.pull-right
+    a(ng-click="layout = 'list'" ng-class="{'tab-active': layout === 'list'}")
+      i.fa.fa-list
+  li.pull-right
+    a(ng-click="layout = 'grid'" ng-class="{'tab-active': layout === 'grid'}")
+      i.fa.fa-table

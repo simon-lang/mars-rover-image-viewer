@@ -12,6 +12,7 @@ module.exports = [
   ($scope, $state, $window, localStorageService, photoService) ->
 
     $scope.$state = $state
+    $scope.layout = 'list'
     $scope.searchBy = 'Earth Date'
     $scope.manifests = manifests = {}
 
