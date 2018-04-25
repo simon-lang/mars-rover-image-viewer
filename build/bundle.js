@@ -5133,7 +5133,7 @@
 
 
 	// module
-	exports.push([module.id, ".margin {\n  margin: 1em;\n}\n.link {\n  cursor: pointer;\n}\n.padded {\n  padding: 1em;\n}\n.text-center {\n  text-align: center;\n}\n.space-before {\n  margin-top: 1em;\n}\n.brand-font {\n  font-family: 'Quantico', sans-serif;\n}\nbody {\n  font-family: 'Quantico', sans-serif;\n}\n.loading,\n.no-content {\n  text-align: center;\n  padding: 4em 0;\n}\n.pane {\n  border: 1px solid #464545;\n  border-top: none;\n}\n.layout-grid .photo {\n  width: 30%;\n  display: inline-block;\n}\n.photo img {\n  width: 100%;\n}\n.header {\n  background: #111;\n  padding-bottom: 1em;\n}\n.section-heading {\n  margin-top: 0;\n  padding-top: 0;\n}\n.share-code {\n  padding: 1em;\n  max-width: 100%;\n  overflow: hidden;\n  text-align: center;\n}\n.share-code-input {\n  background: rgba(0,0,0,0.1);\n  color: #00bc8c;\n}\n.wrapper {\n  position: relative;\n  padding-top: 20px;\n}\n.wrapper.stuck .sidebar {\n  position: fixed;\n}\n.sidebar {\n  position: absolute;\n  top: 20px;\n  width: 320px;\n}\n.main {\n  padding-left: 340px;\n}\n", ""]);
+	exports.push([module.id, ".margin {\n  margin: 1em;\n}\n.link {\n  cursor: pointer;\n}\n.padded {\n  padding: 1em;\n}\n.text-center {\n  text-align: center;\n}\n.space-before {\n  margin-top: 1em;\n}\n.brand-font {\n  font-family: 'Quantico', sans-serif;\n}\nbody {\n  font-family: 'Quantico', sans-serif;\n}\n.loading,\n.no-content {\n  text-align: center;\n  padding: 4em 0;\n}\n.pane {\n  border: 1px solid #464545;\n  border-top: none;\n}\n.layout-grid .photo {\n  width: 32%;\n  display: inline-block;\n  margin-right: 1%;\n}\n.photo img {\n  width: 100%;\n}\n.header {\n  background: #111;\n  padding-bottom: 1em;\n}\n.section-heading {\n  margin-top: 0;\n  padding-top: 0;\n}\n.share-code {\n  padding: 1em;\n  max-width: 100%;\n  overflow: hidden;\n  text-align: center;\n}\n.share-code-input {\n  background: rgba(0,0,0,0.1);\n  color: #00bc8c;\n}\n.tab-active i {\n  color: #00bc8c;\n}\n.wrapper {\n  position: relative;\n  padding-top: 20px;\n}\n.wrapper.stuck .sidebar {\n  position: fixed;\n}\n.sidebar {\n  position: absolute;\n  top: 20px;\n  width: 320px;\n}\n.main {\n  padding-left: 340px;\n}\n", ""]);
 
 	// exports
 
@@ -5341,13 +5341,13 @@
 /* 24 */
 /***/ function(module, exports) {
 
-	module.exports = "<img class=\"img-responsive\" ng-src=\"{{photo.img_src}}\"/><div class=\"well\"><h4><a class=\"btn btn-danger pull-right\" ng-if=\"photo.id\" ng-click=\"save(photo)\"><i class=\"fa fa-trash\"></i><span ng-if=\"!isMobile\"> Remove From Collection</span></a>{{ photo.rover.name }}</h4><div>{{ photo.earth_date }}</div><div>{{ photo.camera.name }} ({{ photo.camera.full_name }})</div><div><a class=\"link\" ng-click=\"findSimilar(photo)\">See Similar</a></div></div>";
+	module.exports = "<img class=\"img-responsive\" ng-src=\"{{photo.img_src}}\"/><div class=\"well\"><h4><a class=\"btn btn-danger pull-right\" ng-if=\"photo.id\" ng-click=\"save(photo)\"><i class=\"fa fa-trash\"></i><span ng-if=\"!isMobile &amp;&amp; layout !== 'grid'\"> Remove From Collection</span></a>{{ photo.rover.name }}</h4><div>{{ photo.earth_date }}</div><div>{{ photo.camera.name }} ({{ photo.camera.full_name }})</div><div><a class=\"link\" ng-click=\"findSimilar(photo)\">See Similar</a></div></div>";
 
 /***/ },
 /* 25 */
 /***/ function(module, exports) {
 
-	module.exports = "<ul class=\"nav nav-tabs\"><li class=\"link\" ng-class=\"{ active: $state.includes('results') }\"><a ui-sref=\"results\">Results</a></li><li class=\"link\" ng-class=\"{ active: $state.includes('manifest'), disabled: !currentManifest() }\"><a ui-sref=\"manifest\">Manifest</a></li><li class=\"link\" ng-class=\"{ active: $state.includes('collected') }\"><a ui-sref=\"collected\">Collected Images</a></li><li class=\"pull-right\"><a ng-click=\"layout = 'list'\" ng-class=\"{'active': layout === 'list'}\"><i class=\"fa fa-list\"></i></a><a ng-click=\"layout = 'grid'\" ng-class=\"{'active': layout === 'grid'}\"><i class=\"fa fa-table\"></i></a></li></ul>";
+	module.exports = "<ul class=\"nav nav-tabs\"><li class=\"link\" ng-class=\"{ active: $state.includes('results') }\"><a ui-sref=\"results\">Results</a></li><li class=\"link\" ng-class=\"{ active: $state.includes('manifest'), disabled: !currentManifest() }\"><a ui-sref=\"manifest\">Manifest</a></li><li class=\"link\" ng-class=\"{ active: $state.includes('collected') }\"><a ui-sref=\"collected\">Collected Images</a></li><li class=\"pull-right\"><a ng-click=\"layout = 'list'\" ng-class=\"{'tab-active': layout === 'list'}\"><i class=\"fa fa-list\"></i></a></li><li class=\"pull-right\"><a ng-click=\"layout = 'grid'\" ng-class=\"{'tab-active': layout === 'grid'}\"><i class=\"fa fa-table\"></i></a></li></ul>";
 
 /***/ },
 /* 26 */
